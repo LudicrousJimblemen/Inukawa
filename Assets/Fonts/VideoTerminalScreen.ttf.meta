@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: acc12ba3a90954a468912dbaa52162b6
+timeCreated: 1513018744
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Video Terminal Screen
+  fontNames:
+  - Video Terminal Screen
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
