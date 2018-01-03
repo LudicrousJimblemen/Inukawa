@@ -103,6 +103,6 @@ public class WorldObject {
 	}
 
 	public void Act(string action, WorldObject directObject = null, WorldObject indirectObject = null) {
-		Archetype.Get(this.ArchetypeId).GetAction(action);
+		Archetype.Get(this.ArchetypeId).GetAction(action).Function(this, directObject, indirectObject);
 	}
 }
