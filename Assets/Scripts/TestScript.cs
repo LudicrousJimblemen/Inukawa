@@ -2,9 +2,9 @@
 
 public class TestScript : MonoBehaviour {
 	private void Start() {
-		WorldObject king = World.AddObject("king", new Identity("Zimb"));
-		WorldObject queen = World.AddObject("queen", new Identity("Ack"));
-		WorldObject baby = World.AddObject("baby", new Identity("Bab"));
+		WorldObject king = World.AddObject("king", new Identity("Zimb"), Location.Get("house"));
+		WorldObject queen = World.AddObject("queen", new Identity("Ack"), Location.Get("house"));
+		WorldObject baby = World.AddObject("baby", new Identity("Bab"), Location.Get("house"));
 
 		king.AddRelationship("son", baby);
 		king.AddRelationship("wife", queen);
@@ -15,19 +15,20 @@ public class TestScript : MonoBehaviour {
 		baby.AddRelationship("father", king);
 		baby.AddRelationship("mother", queen);
 
-		WorldObject egg = World.AddObject("egg");
+		WorldObject egg = World.AddObject("egg", null, Location.Get("house"));
 
 		baby.AddPossession(egg);
 
 		king.Act("take", egg, baby);
+		king.MoveTo(Location.Get("hell"));
 	}
 
 	private void OnDrawGizmos() {
 		const int square = 11;
 		float half = (square - 1) / 2f;
 
-		Gizmos.color = Color.white;
 		for (int i = 0; i < World.Objects.Count; i++) {
+			Gizmos.color = World.Objects[i].Location.Id == "house" ? Color.white : Color.cyan;
 			Gizmos.DrawSphere(new Vector3(i % square - half, i / square - half), 0.3f);
 		}
 

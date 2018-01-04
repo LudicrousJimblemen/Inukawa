@@ -5,8 +5,8 @@ using System.Linq;
 public static class World {
 	public static List<WorldObject> Objects = new List<WorldObject>();
 
-	public static WorldObject AddObject(string archetype, Identity identity = null) {
-		WorldObject newObject = new WorldObject(archetype, identity);
+	public static WorldObject AddObject(string archetype, Identity identity = null, Location location = null) {
+		WorldObject newObject = new WorldObject(archetype, identity, location);
 		Objects.Add(newObject);
 
 		return newObject;
