@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.UI;
 
 public class TestScript : MonoBehaviour {
 	public Text Text;
+
+	private Entity player = new Entity("human", new Identity("Inukawa"), Location.Get("house"));
 
 	private void Start() {
 		StartCoroutine(Test());
@@ -18,13 +21,14 @@ public class TestScript : MonoBehaviour {
 		Text.text += "\n\n" + text;
 	}
 
-	private void OnDrawGizmos() {
-		const int square = 11;
-		float half = (square - 1) / 2f;
+	private const int square = 11;
+	private float half = (square - 1) / 2f;
 
+	private void OnDrawGizmos() {
 		Gizmos.color = Color.white;
 		for (int i = 0; i < World.Entities.Count; i++) {
 			Gizmos.DrawSphere(new Vector3(i % square - half, i / square - half), 0.3f);
+			Handles.Label(new Vector3(i % square - half - 0.2f, i / square - half - 0.2f), World.Entities[i].Archetype.Id);
 		}
 
 		for (int i = 0; i < World.Entities.Count; i++) {
