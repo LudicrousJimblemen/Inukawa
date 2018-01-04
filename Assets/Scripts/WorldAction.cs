@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 /// <summary>
-/// An action performable by a <see cref="WorldObject"/>.
+/// An action performable by a <see cref="Entity"/>.
 /// </summary>
 public class WorldAction {
 	/// <summary>
@@ -15,5 +15,5 @@ public class WorldAction {
 	/// <summary>
 	/// The function to execute on the subject, direct object, and indirect object, returning true if the action is successful.
 	/// </summary>
-	public Func<WorldObject, WorldObject, WorldObject, bool> Function;
+	public Func<Entity, Entity, Entity, bool> Function;
 }

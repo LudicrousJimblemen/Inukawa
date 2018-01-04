@@ -2,7 +2,7 @@
 using System.Linq;
 
 /// <summary>
-/// Defines a type of <see cref="WorldObject"/>.
+/// Defines a type of <see cref="Entity"/>.
 /// </summary>
 public class Archetype {
 	/// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
 /// <summary>
-/// Defines a location which <see cref="WorldObject"/>s may interact which each other in.
+/// Defines a location which <see cref="Entity"/>s may interact which each other in.
 /// </summary>
 public class Location {
 	/// <summary>
