@@ -5,7 +5,7 @@ public class Location {
 
 	private static Location[] locations = new Location[] {
 		new Location { Id = "house" },
-		new Location { Id = "hell" }
+		new Location { Id = "alien ship" }
 	};
 
 	public static Location Get(string id) {

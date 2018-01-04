@@ -1,34 +1,32 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class TestScript : MonoBehaviour {
+	public Text Text;
+
+	private WorldObject player = World.AddObject("human", new Identity("Inukawa"), Location.Get("house"));
+	private WorldObject alien1 = World.AddObject("alien", new Identity("Alien 1"), Location.Get("alien ship"));
+	private WorldObject alien2 = World.AddObject("alien", new Identity("Alien 2"), Location.Get("alien ship"));
+
 	private void Start() {
-		WorldObject king = World.AddObject("king", new Identity("Zimb"), Location.Get("house"));
-		WorldObject queen = World.AddObject("queen", new Identity("Ack"), Location.Get("house"));
-		WorldObject baby = World.AddObject("baby", new Identity("Bab"), Location.Get("house"));
+		Add("whoa! cool!!! aliens!!!!!");
 
-		king.AddRelationship("son", baby);
-		king.AddRelationship("wife", queen);
+		player.MoveTo(Location.Get("alien ship"));
 
-		queen.AddRelationship("son", baby);
-		queen.AddRelationship("husband", king);
-
-		baby.AddRelationship("father", king);
-		baby.AddRelationship("mother", queen);
-
-		WorldObject egg = World.AddObject("egg", null, Location.Get("house"));
-
-		baby.AddPossession(egg);
-
-		king.Act("take", egg, baby);
-		king.MoveTo(Location.Get("hell"));
+		Add("now you in the alien ship");
+	}
+	
+	private void Add(string text) {
+		Text.text += "\n\n" + text;
 	}
 
+	/*
 	private void OnDrawGizmos() {
 		const int square = 11;
 		float half = (square - 1) / 2f;
 
+		Gizmos.color = Color.white;
 		for (int i = 0; i < World.Objects.Count; i++) {
-			Gizmos.color = World.Objects[i].Location.Id == "house" ? Color.white : Color.cyan;
 			Gizmos.DrawSphere(new Vector3(i % square - half, i / square - half), 0.3f);
 		}
 
@@ -52,4 +50,5 @@ public class TestScript : MonoBehaviour {
 			}
 		}
 	}
+	*/
 }

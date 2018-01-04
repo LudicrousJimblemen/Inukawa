@@ -6,6 +6,7 @@ public class Archetype {
 	public string Id;
 	public string InheritsFrom;
 	public string[] Parts;
+	public bool Static;
 	public List<WorldAction> Actions;
 
 	private static Archetype[] archetypes = new Archetype[] {
@@ -32,33 +33,9 @@ public class Archetype {
 			}
 		},
 		new Archetype {
-			Id = "ear",
-			InheritsFrom = "object",
-			Parts = new string[] { },
-			Actions = new List<WorldAction> { }
-		},
-		new Archetype {
-			Id = "mouth",
-			InheritsFrom = "object",
-			Parts = new string[] { },
-			Actions = new List<WorldAction> { }
-		},
-		new Archetype {
-			Id = "nose",
-			InheritsFrom = "object",
-			Parts = new string[] { },
-			Actions = new List<WorldAction> { }
-		},
-		new Archetype {
-			Id = "eye",
-			InheritsFrom = "object",
-			Parts = new string[] { },
-			Actions = new List<WorldAction> { }
-		},
-		new Archetype {
 			Id = "face",
 			InheritsFrom = "object",
-			Parts = new string[] { "nose", "mouth", "eye", "eye" },
+			Parts = new string[] { },
 			Actions = new List<WorldAction> { }
 		},
 		new Archetype {
@@ -76,7 +53,7 @@ public class Archetype {
 		new Archetype {
 			Id = "head",
 			InheritsFrom = "object",
-			Parts = new string[] { "face", "ear", "ear" },
+			Parts = new string[] { "face" },
 			Actions = new List<WorldAction> { }
 		},
 		new Archetype {
@@ -92,30 +69,24 @@ public class Archetype {
 			Actions = new List<WorldAction> { }
 		},
 		new Archetype {
-			Id = "human",
+			Id = "humanoid",
 			InheritsFrom = "object",
 			Parts = new string[] { "leg", "leg", "arm", "arm", "head" },
 			Actions = new List<WorldAction> { }
 		},
 		new Archetype {
-			Id = "king",
-			InheritsFrom = "human",
+			Id = "human",
+			InheritsFrom = "humanoid",
 			Parts = new string[] { },
 			Actions = new List<WorldAction> { }
 		},
 		new Archetype {
-			Id = "queen",
-			InheritsFrom = "human",
+			Id = "alien",
+			InheritsFrom = "humanoid",
 			Parts = new string[] { },
 			Actions = new List<WorldAction> { }
 		},
 		new Archetype {
-			Id = "baby",
-			InheritsFrom = "human",
-			Parts = new string[] { },
-			Actions = new List<WorldAction> { }
-		},
-			new Archetype {
 			Id = "food",
 			InheritsFrom = "object",
 			Parts = new string[] { },
