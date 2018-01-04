@@ -50,6 +50,25 @@ public class Archetype {
 							}
 						}
 					}
+				},
+				new WorldAction {
+					Id = "give",
+					Function = (subject, direct, indirect) => {
+						if (direct == null) {
+							return false;
+						} else {
+							if (direct.PartOf == null) {
+								if (indirect == null) {
+									return false;
+								} else {
+									indirect.AddPossession(direct);
+									return true;
+								}
+							} else {
+								return false;
+							}
+						}
+					}
 				}
 			}
 		},
