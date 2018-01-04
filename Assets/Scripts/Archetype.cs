@@ -1,12 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// Defines a type of <see cref="WorldObject"/>.
+/// </summary>
 public class Archetype {
+	/// <summary>
+	/// A unique identifier for this <see cref="Archetype"/>.
+	/// </summary>
 	public string Id;
+
+	/// <summary>
+	/// An <see cref="Archetype"/>, if any, which this <see cref="Archetype"/> inherits parts and actions from.
+	/// </summary>
 	public string InheritsFrom;
+
+	/// <summary>
+	/// A collection of <see cref="Archetype"/>s which are an immutable part of this <see cref="Archetype"/>.
+	/// </summary>
 	public string[] Parts;
+
+	/// <summary>
+	/// If this <see cref="Archetype"/> is an element of its location and is unable to be moved.
+	/// </summary>
 	public bool Static;
+
+	/// <summary>
+	/// Collection of actions which this <see cref="Archetype"/> may perform.
+	/// </summary>
 	public List<WorldAction> Actions;
 
 	private static Archetype[] archetypes = new Archetype[] {
@@ -16,7 +37,7 @@ public class Archetype {
 			Parts = null,
 			Actions = new List<WorldAction> {
 				new WorldAction {
-					Name = "take",
+					Id = "take",
 					Function = (subject, direct, indirect) => {
 						if (direct == null) {
 							return false;
@@ -100,13 +121,27 @@ public class Archetype {
 		}
 	};
 
+	/// <summary>
+	/// Finds an <see cref="Archetype"/> by its id.
+	/// </summary>
+	/// <param name="id">The id of the archetype to search for.</param>
+	/// <returns>The matching <see cref="Archetype"/> if any; null otherwise.</returns>
 	public static Archetype Get(string id) {
-		return archetypes.First(x => x.Id == id);
+		if (archetypes.Any(x => x.Id == id)) {
+			return archetypes.First(x => x.Id == id);
+		} else {
+			return null;
+		}
 	}
 
+	/// <summary>
+	/// Finds an action performable by this archetype. 
+	/// </summary>
+	/// <param name="action">The id of the action to search for.</param>
+	/// <returns>The matching action if any; null otherwise.</returns>
 	public WorldAction GetAction(string action) {
-		if (this.Actions.Any(x => x.Name == action)) {
-			return this.Actions.First(x => x.Name == action);
+		if (this.Actions.Any(x => x.Id == action)) {
+			return this.Actions.First(x => x.Id == action);
 		} else {
 			if (this.InheritsFrom == null) {
 				return null;
