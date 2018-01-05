@@ -69,6 +69,17 @@ public class Archetype {
 							}
 						}
 					}
+				},
+				new WorldAction {
+					Id = "kick",
+					Function = (subject, direct, indirect) => {
+						if (direct == null) {
+							return false;
+						} else {
+							// TODO: Remove this, probably.
+							return true;
+						}
+					}
 				}
 			}
 		},
@@ -117,6 +128,12 @@ public class Archetype {
 		new Archetype {
 			Id = "human",
 			InheritsFrom = "humanoid",
+			Parts = new string[] { },
+			Actions = new List<WorldAction> { }
+		},
+		new Archetype {
+			Id = "baby",
+			InheritsFrom = "human",
 			Parts = new string[] { },
 			Actions = new List<WorldAction> { }
 		},

@@ -36,7 +36,7 @@ public class Entity {
 	public List<Entity> Possessions = new List<Entity>();
 	
 	/// <summary>
-	/// The <see cref="Entity"/> which this <see cref="Entity"/> is a possession of.
+	/// The <see cref="Entity"/> which this <see cref="Entity"/> is a possession of, if any.
 	/// </summary>
 	public Entity PossessionOf = null;
 
@@ -53,6 +53,7 @@ public class Entity {
 	/// <param name="location">The <see cref="global::Location"/> of this <see cref="Entity"/>.</param>
 	public Entity(string archetype, Identity identity = null, Location location = null) {
 		this.Archetype = Archetype.Get(archetype);
+
 		this.Identity = identity;
 
 		this.Location = location;
@@ -216,7 +217,8 @@ public class Entity {
 	/// <param name="action">The unique id of the <see cref="WorldAction"/> to execute.</param>
 	/// <param name="directObject">The <see cref="Entity"/> to act upon, if any.</param>
 	/// <param name="indirectObject">The secondary <see cref="Entity"/> affected, if any.</param>
-	public void Act(string action, Entity directObject = null, Entity indirectObject = null) {
-		this.Archetype.GetAction(action).Function(this, directObject, indirectObject);
+	/// <returns>True if successful, false otherwise.</returns>
+	public bool Act(string action, Entity directObject = null, Entity indirectObject = null) {
+		return this.Archetype.GetAction(action).Function(this, directObject, indirectObject);
 	}
 }
