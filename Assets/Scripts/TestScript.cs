@@ -1,53 +1,14 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
-using UnityEngine.UI;
-using System;
 
 public class TestScript : MonoBehaviour {
-	public Text Text;
-
-	private Entity player;
-
+	public Console Console;
+	
 	private void Start() {
-		player = World.AddEntity("human", new Identity("Inukawa"), Location.Get("house"));
-
-		World.AddEntity("baby", new Identity("Bab"), Location.Get("house"));
-		World.AddEntity("egg", null, Location.Get("house"));
-
-		StartCoroutine(Test());
-	}
-
-	private IEnumerator Test() {
-		Write("You in a house.");
-		yield return new WaitForSeconds(0.5f);
-		Act("take", World.GetEntityByArchetype("egg"));
-		yield return new WaitForSeconds(0.5f);
-		Act("give", World.GetEntityByArchetype("egg"), World.GetEntityByArchetype("baby"));
-		yield return new WaitForSeconds(0.5f);
-		Act("kick", World.GetEntityByArchetype("baby"));
-		yield return new WaitForSeconds(0.5f);
-		Act("kick", World.GetEntityByArchetype("egg"));
-		yield return new WaitForSeconds(0.5f);
-		Act("take", World.GetEntityByArchetype("egg"));
-		yield return new WaitForSeconds(0.5f);
-	}
-
-	private void Act(string action, Entity directObject = null, Entity indirectObject = null) {
-		bool success = player.Act(action, directObject, indirectObject);
-		// TODO: I have no idea what I am doing.
-
-		Write(String.Format(
-			"You{0} {1}{2}{3}.",
-			success ? String.Empty : " are unable to",
-			action,
-			directObject == null ? String.Empty : directObject.Identity == null ? " the " + directObject.Archetype.Id : " " + directObject.Identity.Name,
-			indirectObject == null ? String.Empty : " from/with/to " + (indirectObject.Identity == null ? " the " + indirectObject.Archetype.Id : indirectObject.Identity.Name)
-		));
-	}
-
-	private void Write(string text) {
-		Text.text += "\n\n" + text;
+		Entity player = World.AddEntity("human", new Identity("Inukawa"), Location.Get("room"));
+		Entity door = World.AddEntity("door", null, Location.Get("room"));
+		Entity chest = World.AddEntity("chest", null, Location.Get("room"));
+		Entity key = World.AddEntity("key", null, Location.Get("room"), new Position("under", chest));
 	}
 
 	private const int square = 11;

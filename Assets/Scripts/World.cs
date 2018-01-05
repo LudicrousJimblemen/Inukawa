@@ -18,8 +18,8 @@ public static class World {
 	/// <param name="identity">The <see cref="Identity"/> of the new <see cref="Entity"/>.</param>
 	/// <param name="location">The <see cref="Location"/> of the new <see cref="Entity"/>.</param>
 	/// <returns>The new <see cref="Entity"/>.</returns>
-	public static Entity AddEntity(string archetype, Identity identity = null, Location location = null) {
-		Entity newEntity = new Entity(archetype, identity, location);
+	public static Entity AddEntity(string archetype, Identity identity = null, Location location = null, Position position = null) {
+		Entity newEntity = new Entity(archetype, identity, location, position);
 		Entities.Add(newEntity);
 
 		return newEntity;

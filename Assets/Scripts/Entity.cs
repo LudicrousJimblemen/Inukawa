@@ -46,23 +46,29 @@ public class Entity {
 	public List<Reference> References = new List<Reference>();
 
 	/// <summary>
+	/// A specific position in the <see cref="Location"/> where this <see cref="Entity"/> is located, if any.
+	/// </summary>
+	public Position Position = null;
+
+	/// <summary>
 	/// Creates a new <see cref="Entity"/>.
 	/// </summary>
 	/// <param name="archetype">The unique id of the archetype of this <see cref="Entity"/></param>
 	/// <param name="identity">The <see cref="global::Identity"/> of this <see cref="Entity"/>.</param>
 	/// <param name="location">The <see cref="global::Location"/> of this <see cref="Entity"/>.</param>
-	public Entity(string archetype, Identity identity = null, Location location = null) {
+	public Entity(string archetype, Identity identity = null, Location location = null, Position position = null) {
 		this.Archetype = Archetype.Get(archetype);
 
 		this.Identity = identity;
 
 		this.Location = location;
+		this.Position = position;
 
 		string currentArchetype = this.Archetype.Id;
 		while (currentArchetype != null) {
 			if (Archetype.Get(currentArchetype).Parts != null) {
 				foreach (var part in Archetype.Get(currentArchetype).Parts) {
-					Entity newPart = World.AddEntity(part, null, this.Location);
+					Entity newPart = World.AddEntity(part, null, this.Location, this.Position);
 
 					this.AddPart(newPart);
 				}
@@ -219,6 +225,9 @@ public class Entity {
 	/// <param name="indirectObject">The secondary <see cref="Entity"/> affected, if any.</param>
 	/// <returns>True if successful, false otherwise.</returns>
 	public bool Act(string action, Entity directObject = null, Entity indirectObject = null) {
+		if (directObject.Location != this.Location || indirectObject.Location != this.Location) {
+			return false;
+		}
 		return this.Archetype.GetAction(action).Function(this, directObject, indirectObject);
 	}
 }

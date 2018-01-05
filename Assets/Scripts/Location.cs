@@ -10,7 +10,7 @@ public class Location {
 	public string Id;
 
 	private static Location[] locations = new Location[] {
-		new Location { Id = "house" }
+		new Location { Id = "room" }
 	};
 
 	/// <summary>
