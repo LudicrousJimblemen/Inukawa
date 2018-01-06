@@ -29,12 +29,12 @@ public static class World {
 	/// Gets a <see cref="Entity"/> which matches a predicate.
 	/// </summary>
 	/// <param name="predicate">The function by which to search for an <see cref="Entity"/>.</param>
-	/// <returns>The found <see cref="Entity"/> if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public static Entity GetEntity(Func<Entity, bool> predicate) {
 		if (Entities.Any(predicate)) {
 			return Entities.First(predicate);
 		} else {
-			return null;
+			throw new KeyNotFoundException();
 		}
 	}
 
@@ -42,12 +42,12 @@ public static class World {
 	/// Gets <see cref="Entity"/>s which match a predicate.
 	/// </summary>
 	/// <param name="predicate">The function by which to search for <see cref="Entity"/>s.</param>
-	/// <returns>The found <see cref="Entity"/>s if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public static List<Entity> GetEntities(Func<Entity, bool> predicate) {
 		if (Entities.Any(predicate)) {
 			return Entities.Where(predicate).ToList();
 		} else {
-			return null;
+			throw new KeyNotFoundException();
 		}
 	}
 
@@ -55,26 +55,41 @@ public static class World {
 	/// Gets a <see cref="Entity"/> by its <see cref="Archetype"/>.
 	/// </summary>
 	/// <param name="archetype">The id of the <see cref="Archetype"/> to search for.</param>
-	/// <returns>The found <see cref="Entity"/> if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public static Entity GetEntityByArchetype(string archetype) {
-		return World.GetEntity(x => x.Archetype.Id == archetype);
+		Entity returned = World.GetEntity(x => x.Archetype.Id == archetype);
+		if (returned != null) {
+			return returned;
+		} else {
+			throw new KeyNotFoundException(archetype);
+		}
 	}
 
 	/// <summary>
 	/// Gets <see cref="Entity"/>s by their <see cref="Archetype"/>.
 	/// </summary>
 	/// <param name="archetype">The id of the <see cref="Archetype"/> to search for.</param>
-	/// <returns>The found <see cref="Entity"/>s if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public static List<Entity> GetEntitiesByArchetype(string archetype) {
-		return World.GetEntities(x => x.Archetype.Id == archetype);
+		List<Entity> returned = World.GetEntities(x => x.Archetype.Id == archetype);
+		if (returned.Any()) {
+			return returned;
+		} else {
+			throw new KeyNotFoundException(archetype);
+		}
 	}
 
 	/// <summary>
 	/// Gets a <see cref="Entity"/> by its <see cref="Identity"/>'s name.
 	/// </summary>
 	/// <param name="name">The name of the <see cref="Identity"/> of the <see cref="Entity"/> to search for.</param>
-	/// <returns>The found <see cref="Entity"/> if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public static Entity GetEntityByName(string name) {
-		return Entities.First(x => x.Identity != null && x.Identity.Name.ToLowerInvariant() == name.ToLowerInvariant());
+		Entity returned = Entities.First(x => x.Identity != null && x.Identity.Name.ToLowerInvariant() == name.ToLowerInvariant());
+		if (returned != null) {
+			return returned;
+		} else {
+			throw new KeyNotFoundException(name);
+		}
 	}
 }

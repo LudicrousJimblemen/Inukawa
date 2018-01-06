@@ -94,7 +94,7 @@ public class Entity {
 	/// Gets a part of this <see cref="Entity"/> given its <see cref="Archetype"/>.
 	/// </summary>
 	/// <param name="archetype">The unique identifier of the <see cref="Archetype"/> of the part.</param>
-	/// <returns>The found <see cref="Entity"/> if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public Entity GetPart(string archetype) {
 		if (this.Parts.Any(x => x.Archetype.Id == archetype)) {
 			return this.Parts.First(x => x.Archetype.Id == archetype);
@@ -108,7 +108,11 @@ public class Entity {
 				}
 			}
 
-			return found;
+			if (found == null) {
+				throw new KeyNotFoundException(archetype);
+			} else {
+				return found;
+			}
 		}
 	}
 
@@ -116,7 +120,7 @@ public class Entity {
 	/// Gets parts of this <see cref="Entity"/> given their <see cref="Archetype"/>.
 	/// </summary>
 	/// <param name="archetype">The unique identifier of the <see cref="Archetype"/> of the parts.</param>
-	/// <returns>The found <see cref="Entity"/>s if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>s.</returns>
 	public List<Entity> GetParts(string archetype) {
 		IEnumerable<Entity> found = new List<Entity>();
 
@@ -126,7 +130,11 @@ public class Entity {
 			found = found.Concat(part.GetParts(archetype));
 		}
 
-		return found.Count() > 0 ? found.ToList() : null;
+		if (found.Count() > 0) {
+			return found.ToList();
+		} else {
+			throw new KeyNotFoundException(archetype);
+		}
 	}
 
 	/// <summary>
@@ -162,9 +170,15 @@ public class Entity {
 	/// Gets a possession of this <see cref="Entity"/> given its <see cref="Archetype"/>.
 	/// </summary>
 	/// <param name="archetype">The unique identifier of the <see cref="Archetype"/> of the possession.</param>
-	/// <returns>The found <see cref="Entity"/> if any; null otherwise.</returns>
+	/// <returns>The found <see cref="Entity"/>.</returns>
 	public List<Entity> GetPossessions(string archetype) {
-		return this.Possessions.Where(x => x.Archetype.Id == archetype).ToList();
+		List<Entity> returned = this.Possessions.Where(x => x.Archetype.Id == archetype).ToList();
+
+		if (returned.Count > 0) {
+			return returned;
+		} else {
+			throw new KeyNotFoundException(archetype);
+		}
 	}
 
 	/// <summary>
@@ -180,12 +194,12 @@ public class Entity {
 	/// Gets a <see cref="Entity"/> from a <see cref="Reference"/>'s alias.
 	/// </summary>
 	/// <param name="alias">The alias of the <see cref="Reference"/>.</param>
-	/// <returns>The found <see cref="Entity"/> if any; null otherwise. </returns>
+	/// <returns>The found <see cref="Entity"/>. </returns>
 	public Entity GetReference(string alias) {
 		if (this.References.Any(x => x.Alias == alias)) {
 			return this.References.First(x => x.Alias == alias).Entity;
 		} else {
-			return null;
+			throw new KeyNotFoundException(alias);
 		}
 	}
 
@@ -193,12 +207,12 @@ public class Entity {
 	/// Gets <see cref="Entity"/>s from their <see cref="Reference"/>s' aliases.
 	/// </summary>
 	/// <param name="alias">The alias of the <see cref="Reference"/>s.</param>
-	/// <returns>The found <see cref="Entity"/>s if any; null otherwise. </returns>
+	/// <returns>The found <see cref="Entity"/>s. </returns>
 	public List<Entity> GetReferences(string alias) {
 		if (this.References.Any(x => x.Alias == alias)) {
 			return this.References.Where(x => x.Alias == alias).Select(x => x.Entity).ToList();
 		} else {
-			return null;
+			throw new KeyNotFoundException(alias);
 		}
 	}
 
@@ -225,7 +239,7 @@ public class Entity {
 	/// <param name="indirectObject">The secondary <see cref="Entity"/> affected, if any.</param>
 	/// <returns>True if successful, false otherwise.</returns>
 	public bool Act(string action, Entity directObject = null, Entity indirectObject = null) {
-		if (directObject.Location != this.Location || indirectObject.Location != this.Location) {
+		if ((directObject != null && directObject.Location != this.Location) || (indirectObject != null && indirectObject.Location != this.Location)) {
 			return false;
 		}
 		return this.Archetype.GetAction(action).Function(this, directObject, indirectObject);

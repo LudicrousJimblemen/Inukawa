@@ -9,6 +9,17 @@ public class TestScript : MonoBehaviour {
 		Entity door = World.AddEntity("door", null, Location.Get("room"));
 		Entity chest = World.AddEntity("chest", null, Location.Get("room"));
 		Entity key = World.AddEntity("key", null, Location.Get("room"), new Position("under", chest));
+
+		door.AddReference("key", key);
+
+		player.Act("open", door);       // Will Not Work !!!!! Door Locked !!!!!
+		player.Act("unlock", door);     // Will Not Work !!!!! No Key !!!!!
+		player.Act("take", key);		// Will Not Work !!!!! Key Where ?????
+		player.Act("open", chest);		// Ja Ja Ja Ja Ja
+		player.Act("take", key, chest); // Ja Ja Ja Ja Ja
+		player.Act("open", door);		// Will Not Work !!!!! Door Locked !!!!!
+		player.Act("unlock", door);     // Ja Ja Ja Ja Ja
+		player.Act("open", door);       // Ja Ja Ja Ja Ja
 	}
 
 	private const int square = 11;

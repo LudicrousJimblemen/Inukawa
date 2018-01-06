@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Defines a location which <see cref="Entity"/>s may interact which each other in.
@@ -17,12 +18,12 @@ public class Location {
 	/// Finds an <see cref="Location"/> by its id.
 	/// </summary>
 	/// <param name="id">The id of the location to search for.</param>
-	/// <returns>The matching <see cref="Location"/> if any; null otherwise.</returns>
+	/// <returns>The matching <see cref="Location"/>.</returns>
 	public static Location Get(string id) {
 		if (locations.Any(x => x.Id == id)) {
 			return locations.First(x => x.Id == id);
 		} else {
-			return null;
+			throw new KeyNotFoundException(id);
 		}
 	}
 }

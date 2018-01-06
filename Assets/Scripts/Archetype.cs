@@ -154,6 +154,24 @@ public class Archetype {
 			InheritsFrom = "food",
 			Parts = new string[] { },
 			Actions = new List<WorldAction> { }
+		},
+		new Archetype {
+			Id = "door",
+			InheritsFrom = "object",
+			Parts = new string[] { },
+			Actions = new List<WorldAction> { }
+		},
+		new Archetype {
+			Id = "chest",
+			InheritsFrom = "object",
+			Parts = new string[] { },
+			Actions = new List<WorldAction> { }
+		},
+		new Archetype {
+			Id = "key",
+			InheritsFrom = "object",
+			Parts = new string[] { },
+			Actions = new List<WorldAction> { }
 		}
 	};
 
@@ -161,12 +179,12 @@ public class Archetype {
 	/// Finds an <see cref="Archetype"/> by its id.
 	/// </summary>
 	/// <param name="id">The id of the archetype to search for.</param>
-	/// <returns>The matching <see cref="Archetype"/> if any; null otherwise.</returns>
+	/// <returns>The matching <see cref="Archetype"/>.</returns>
 	public static Archetype Get(string id) {
 		if (archetypes.Any(x => x.Id == id)) {
 			return archetypes.First(x => x.Id == id);
 		} else {
-			return null;
+			throw new KeyNotFoundException(id);
 		}
 	}
 
@@ -174,13 +192,13 @@ public class Archetype {
 	/// Finds an action performable by this archetype. 
 	/// </summary>
 	/// <param name="action">The id of the action to search for.</param>
-	/// <returns>The matching action if any; null otherwise.</returns>
+	/// <returns>The matching action.</returns>
 	public WorldAction GetAction(string action) {
 		if (this.Actions.Any(x => x.Id == action)) {
 			return this.Actions.First(x => x.Id == action);
 		} else {
 			if (this.InheritsFrom == null) {
-				return null;
+				throw new KeyNotFoundException(action);
 			} else {
 				return Archetype.Get(this.InheritsFrom).GetAction(action);
 			}
