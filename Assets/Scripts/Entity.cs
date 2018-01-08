@@ -4,11 +4,11 @@ using System.Linq;
 /// <summary>
 /// Represents an entity in the <see cref="World"/>.
 /// </summary>
-public class Entity {
+public abstract class Entity {
 	/// <summary>
-	/// The <see cref="global::Archetype"/> of this <see cref="Entity"/>. 
+	/// Initializes this <see cref="Entity"/>.
 	/// </summary>
-	public Archetype Archetype;
+	public virtual void Initialize() { }
 
 	/// <summary>
 	/// The <see cref="global::Identity"/> of this <see cref="Entity"/>.
@@ -51,34 +51,6 @@ public class Entity {
 	public Position Position = null;
 
 	/// <summary>
-	/// Creates a new <see cref="Entity"/>.
-	/// </summary>
-	/// <param name="archetype">The unique id of the archetype of this <see cref="Entity"/></param>
-	/// <param name="identity">The <see cref="global::Identity"/> of this <see cref="Entity"/>.</param>
-	/// <param name="location">The <see cref="global::Location"/> of this <see cref="Entity"/>.</param>
-	public Entity(string archetype, Identity identity = null, Location location = null, Position position = null) {
-		this.Archetype = Archetype.Get(archetype);
-
-		this.Identity = identity;
-
-		this.Location = location;
-		this.Position = position;
-
-		string currentArchetype = this.Archetype.Id;
-		while (currentArchetype != null) {
-			if (Archetype.Get(currentArchetype).Parts != null) {
-				foreach (var part in Archetype.Get(currentArchetype).Parts) {
-					Entity newPart = World.AddEntity(part, null, this.Location, this.Position);
-
-					this.AddPart(newPart);
-				}
-			}
-
-			currentArchetype = Archetype.Get(currentArchetype).InheritsFrom;
-		}
-	}
-
-	/// <summary>
 	/// Adds a <see cref="Entity"/> as a part of this <see cref="Entity"/>.
 	/// </summary>
 	/// <param name="entity">The <see cref="Entity"/> to make a part of this <see cref="Entity"/>.</param>
@@ -88,53 +60,6 @@ public class Entity {
 		entity.PartOf = this;
 
 		return entity;
-	}
-	
-	/// <summary>
-	/// Gets a part of this <see cref="Entity"/> given its <see cref="Archetype"/>.
-	/// </summary>
-	/// <param name="archetype">The unique identifier of the <see cref="Archetype"/> of the part.</param>
-	/// <returns>The found <see cref="Entity"/>.</returns>
-	public Entity GetPart(string archetype) {
-		if (this.Parts.Any(x => x.Archetype.Id == archetype)) {
-			return this.Parts.First(x => x.Archetype.Id == archetype);
-		} else {
-			Entity found = null;
-			foreach (var part in this.Parts) {
-				Entity innerFound = part.GetPart(archetype);
-				if (innerFound != null) {
-					found = innerFound;
-					break;
-				}
-			}
-
-			if (found == null) {
-				throw new KeyNotFoundException(archetype);
-			} else {
-				return found;
-			}
-		}
-	}
-
-	/// <summary>
-	/// Gets parts of this <see cref="Entity"/> given their <see cref="Archetype"/>.
-	/// </summary>
-	/// <param name="archetype">The unique identifier of the <see cref="Archetype"/> of the parts.</param>
-	/// <returns>The found <see cref="Entity"/>s.</returns>
-	public List<Entity> GetParts(string archetype) {
-		IEnumerable<Entity> found = new List<Entity>();
-
-		found = found.Concat(this.Parts.Where(x => x.Archetype.Id == archetype));
-
-		foreach (var part in this.Parts) {
-			found = found.Concat(part.GetParts(archetype));
-		}
-
-		if (found.Count() > 0) {
-			return found.ToList();
-		} else {
-			throw new KeyNotFoundException(archetype);
-		}
 	}
 
 	/// <summary>
@@ -167,21 +92,6 @@ public class Entity {
 	}
 
 	/// <summary>
-	/// Gets a possession of this <see cref="Entity"/> given its <see cref="Archetype"/>.
-	/// </summary>
-	/// <param name="archetype">The unique identifier of the <see cref="Archetype"/> of the possession.</param>
-	/// <returns>The found <see cref="Entity"/>.</returns>
-	public List<Entity> GetPossessions(string archetype) {
-		List<Entity> returned = this.Possessions.Where(x => x.Archetype.Id == archetype).ToList();
-
-		if (returned.Count > 0) {
-			return returned;
-		} else {
-			throw new KeyNotFoundException(archetype);
-		}
-	}
-
-	/// <summary>
 	/// Adds a <see cref="Reference"/> to this <see cref="Entity"/>.
 	/// </summary>
 	/// <param name="alias">The alias of the <see cref="Reference."/></param>
@@ -201,47 +111,5 @@ public class Entity {
 		} else {
 			throw new KeyNotFoundException(alias);
 		}
-	}
-
-	/// <summary>
-	/// Gets <see cref="Entity"/>s from their <see cref="Reference"/>s' aliases.
-	/// </summary>
-	/// <param name="alias">The alias of the <see cref="Reference"/>s.</param>
-	/// <returns>The found <see cref="Entity"/>s. </returns>
-	public List<Entity> GetReferences(string alias) {
-		if (this.References.Any(x => x.Alias == alias)) {
-			return this.References.Where(x => x.Alias == alias).Select(x => x.Entity).ToList();
-		} else {
-			throw new KeyNotFoundException(alias);
-		}
-	}
-
-	/// <summary>
-	/// Moves this <see cref="Entity"/> to another <see cref="global::Location"/>.
-	/// </summary>
-	/// <param name="location">The <see cref="global::Location"/> to move this <see cref="Entity"/> to.</param>
-	public void MoveTo(Location location) {
-		this.Location = location;
-
-		foreach (var part in this.Parts) {
-			part.MoveTo(location);
-		}
-		foreach (var possession in Possessions) {
-			possession.MoveTo(location);
-		}
-	}
-
-	/// <summary>
-	/// Executes an action.
-	/// </summary>
-	/// <param name="action">The unique id of the <see cref="WorldAction"/> to execute.</param>
-	/// <param name="directObject">The <see cref="Entity"/> to act upon, if any.</param>
-	/// <param name="indirectObject">The secondary <see cref="Entity"/> affected, if any.</param>
-	/// <returns>True if successful, false otherwise.</returns>
-	public bool Act(string action, Entity directObject = null, Entity indirectObject = null) {
-		if ((directObject != null && directObject.Location != this.Location) || (indirectObject != null && indirectObject.Location != this.Location)) {
-			return false;
-		}
-		return this.Archetype.GetAction(action).Function(this, directObject, indirectObject);
 	}
 }

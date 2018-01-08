@@ -5,21 +5,19 @@ public class TestScript : MonoBehaviour {
 	public Console Console;
 	
 	private void Start() {
-		Entity player = World.AddEntity("human", new Identity("Inukawa"), Location.Get("room"));
-		Entity door = World.AddEntity("door", null, Location.Get("room"));
-		Entity chest = World.AddEntity("chest", null, Location.Get("room"));
-		Entity key = World.AddEntity("key", null, Location.Get("room"), new Position("under", chest));
-
-		door.AddReference("key", key);
-
-		player.Act("open", door);       // Will Not Work !!!!! Door Locked !!!!!
-		player.Act("unlock", door);     // Will Not Work !!!!! No Key !!!!!
-		player.Act("take", key);		// Will Not Work !!!!! Key Where ?????
-		player.Act("open", chest);		// Ja Ja Ja Ja Ja
-		player.Act("take", key, chest); // Ja Ja Ja Ja Ja
-		player.Act("open", door);		// Will Not Work !!!!! Door Locked !!!!!
-		player.Act("unlock", door);     // Ja Ja Ja Ja Ja
-		player.Act("open", door);       // Ja Ja Ja Ja Ja
+		EntityHuman player = World.AddEntity<EntityHuman>(new Identity("Inukawa"), Location.Get("room"));
+		EntityDoor door = World.AddEntity<EntityDoor>(null, Location.Get("room"));
+		EntityChest chest = World.AddEntity<EntityChest>(null, Location.Get("room"));
+		EntityKey key = World.AddEntity<EntityKey>(null, Location.Get("room"), new Position("under", chest));
+		
+		player.Open(door); // Will Not Work !!!!! Door Locked !!!!!
+		player.Unlock(door, null); // Will Not Work !!!!! No Key !!!!!
+		player.Take(key); // Will Not Work !!!!! Key Where ?????
+		player.Open(chest); // Ja Ja Ja Ja Ja
+		player.Take(key, chest); // Ja Ja Ja Ja Ja
+		player.Open(door); // Will Not Work !!!!! Door Locked !!!!!
+		player.Unlock(door, key); // Ja Ja Ja Ja Ja
+		player.Open(door); // Ja Ja Ja Ja Ja
 	}
 
 	private const int square = 11;
@@ -29,7 +27,7 @@ public class TestScript : MonoBehaviour {
 		Gizmos.color = Color.white;
 		for (int i = 0; i < World.Entities.Count; i++) {
 			Gizmos.DrawSphere(new Vector3(i % square - half, i / square - half), 0.3f);
-			Handles.Label(new Vector3(i % square - half - 0.2f, i / square - half - 0.2f), World.Entities[i].Archetype.Id);
+			// Handles.Label(new Vector3(i % square - half - 0.2f, i / square - half - 0.2f), World.Entities[i].Archetype.Id);
 		}
 
 		for (int i = 0; i < World.Entities.Count; i++) {

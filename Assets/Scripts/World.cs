@@ -14,12 +14,15 @@ public static class World {
 	/// <summary>
 	/// Creates a new <see cref="Entity"/>.
 	/// </summary>
-	/// <param name="archetype">The id of the <see cref="Archetype"/> of the new <see cref="Entity"/>.</param>
 	/// <param name="identity">The <see cref="Identity"/> of the new <see cref="Entity"/>.</param>
 	/// <param name="location">The <see cref="Location"/> of the new <see cref="Entity"/>.</param>
 	/// <returns>The new <see cref="Entity"/>.</returns>
-	public static Entity AddEntity(string archetype, Identity identity = null, Location location = null, Position position = null) {
-		Entity newEntity = new Entity(archetype, identity, location, position);
+	public static T AddEntity<T>(Identity identity = null, Location location = null, Position position = null) where T : Entity, new() {
+		T newEntity = new T();
+		newEntity.Identity = identity;
+		newEntity.Location = location;
+		newEntity.Position = position;
+
 		Entities.Add(newEntity);
 
 		return newEntity;
@@ -48,34 +51,6 @@ public static class World {
 			return Entities.Where(predicate).ToList();
 		} else {
 			throw new KeyNotFoundException();
-		}
-	}
-
-	/// <summary>
-	/// Gets a <see cref="Entity"/> by its <see cref="Archetype"/>.
-	/// </summary>
-	/// <param name="archetype">The id of the <see cref="Archetype"/> to search for.</param>
-	/// <returns>The found <see cref="Entity"/>.</returns>
-	public static Entity GetEntityByArchetype(string archetype) {
-		Entity returned = World.GetEntity(x => x.Archetype.Id == archetype);
-		if (returned != null) {
-			return returned;
-		} else {
-			throw new KeyNotFoundException(archetype);
-		}
-	}
-
-	/// <summary>
-	/// Gets <see cref="Entity"/>s by their <see cref="Archetype"/>.
-	/// </summary>
-	/// <param name="archetype">The id of the <see cref="Archetype"/> to search for.</param>
-	/// <returns>The found <see cref="Entity"/>.</returns>
-	public static List<Entity> GetEntitiesByArchetype(string archetype) {
-		List<Entity> returned = World.GetEntities(x => x.Archetype.Id == archetype);
-		if (returned.Any()) {
-			return returned;
-		} else {
-			throw new KeyNotFoundException(archetype);
 		}
 	}
 
