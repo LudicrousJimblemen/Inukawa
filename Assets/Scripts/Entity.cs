@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
@@ -41,15 +42,15 @@ public abstract class Entity {
 	public Entity PossessionOf = null;
 
 	/// <summary>
+	/// The <see cref="IEntityContainer"/> this <see cref="Entity"/> is in, if any.
+	/// </summary>
+	public IEntityContainer In = null;
+
+	/// <summary>
 	/// A collection of <see cref="Reference"/>s this <see cref="Entity"/> has to other <see cref="Entity"/>s.
 	/// </summary>
 	public List<Reference> References = new List<Reference>();
-
-	/// <summary>
-	/// A specific position in the <see cref="Location"/> where this <see cref="Entity"/> is located, if any.
-	/// </summary>
-	public Position Position = null;
-
+	
 	/// <summary>
 	/// Adds a <see cref="Entity"/> as a part of this <see cref="Entity"/>.
 	/// </summary>
@@ -70,6 +71,10 @@ public abstract class Entity {
 	public Entity AddPossession(Entity entity) {
 		if (entity.PossessionOf != null) {
 			entity.PossessionOf.RemovePossession(entity);
+		}
+
+		if (entity.In != null) {
+			entity.In = null;
 		}
 
 		entity.PossessionOf = this;
@@ -110,6 +115,24 @@ public abstract class Entity {
 			return this.References.First(x => x.Alias == alias).Entity;
 		} else {
 			throw new KeyNotFoundException(alias);
+		}
+	}
+
+	/// <summary>
+	/// Checks if this <see cref="Entity"/> is accessible.
+	/// </summary>
+	/// <returns>True if accessible, false otherwise.</returns>
+	public bool Accessible() {
+		if (this.In != null) {
+			if (this.In is IEntityOpenable) {
+				IEntityOpenable openable = this.In as IEntityOpenable;
+
+				return openable.Open;
+			} else {
+				return true;
+			}
+		} else {
+			return this.PartOf == null;
 		}
 	}
 }

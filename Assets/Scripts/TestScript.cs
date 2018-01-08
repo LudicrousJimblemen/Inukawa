@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 public class TestScript : MonoBehaviour {
 	public Console Console;
@@ -8,16 +7,20 @@ public class TestScript : MonoBehaviour {
 		EntityHuman player = World.AddEntity<EntityHuman>(new Identity("Inukawa"), Location.Get("room"));
 		EntityDoor door = World.AddEntity<EntityDoor>(null, Location.Get("room"));
 		EntityChest chest = World.AddEntity<EntityChest>(null, Location.Get("room"));
-		EntityKey key = World.AddEntity<EntityKey>(null, Location.Get("room"), new Position("under", chest));
-		
-		player.Open(door); // Will Not Work !!!!! Door Locked !!!!!
-		player.Unlock(door, null); // Will Not Work !!!!! No Key !!!!!
-		player.Take(key); // Will Not Work !!!!! Key Where ?????
-		player.Open(chest); // Ja Ja Ja Ja Ja
-		player.Take(key, chest); // Ja Ja Ja Ja Ja
-		player.Open(door); // Will Not Work !!!!! Door Locked !!!!!
-		player.Unlock(door, key); // Ja Ja Ja Ja Ja
-		player.Open(door); // Ja Ja Ja Ja Ja
+		EntityKey key = World.AddEntity<EntityKey>(null, Location.Get("room"));
+
+		door.Open = false;
+		door.Locked = true;
+		door.Key = key;
+
+		chest.Open = false;
+
+		key.In = chest;
+
+		player.Open(chest);
+		player.Take(key, chest);
+		player.Unlock(door, key);
+		player.Open(door);
 	}
 
 	private const int square = 11;
