@@ -43,6 +43,10 @@ public static class World {
 		}
 	}
 
+	public static void RemoveEntity(Entity entity) {
+		Entities.Remove(entity);
+	}
+
 	/// <summary>
 	/// Gets <see cref="Entity"/>s which match a predicate.
 	/// </summary>

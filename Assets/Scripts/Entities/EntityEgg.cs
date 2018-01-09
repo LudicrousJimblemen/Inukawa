@@ -1,1 +1,1 @@
-﻿public class EntityEgg : EntityFood { }
+﻿public class EntityEgg : EntityObject, IEntityEdible { }

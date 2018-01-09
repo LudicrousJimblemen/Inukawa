@@ -33,9 +33,8 @@
 		if (direct.Open) {
 			return false;
 		} else {
-			if (direct is IEntityLockable) {
-				IEntityLockable lockable = direct as IEntityLockable;
-
+			IEntityLockable lockable = direct as IEntityLockable;
+			if (direct != null) {
 				if (lockable.Locked) {
 					return false;
 				} else {
@@ -59,6 +58,15 @@
 			} else {
 				return false;
 			}
+		}
+	}
+
+	public virtual bool Eat(Entity direct) {
+		if (direct is IEntityEdible) {
+			World.RemoveEntity(direct);
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
