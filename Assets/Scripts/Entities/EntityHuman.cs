@@ -34,7 +34,7 @@
 			return false;
 		} else {
 			IEntityLockable lockable = direct as IEntityLockable;
-			if (direct != null) {
+			if (lockable != null) {
 				if (lockable.Locked) {
 					return false;
 				} else {
