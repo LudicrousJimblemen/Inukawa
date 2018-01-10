@@ -9,17 +9,9 @@
 		};
 	}
 
-	public virtual bool Take(Entity direct = null, Entity indirect = null) {
-		if (direct == null) {
-			return false;
-		} else {
-			if (direct.Accessible()) {
-				this.AddPossession(direct);
-				return true;
-			} else {
-				return false;
-			}
-		}
+	public virtual bool Take(Entity direct, Entity indirect = null) {
+		this.AddPossession(direct);
+		return true;
 	}
 
 	public virtual bool Give(Entity direct, Entity indirect) {

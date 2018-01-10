@@ -13,6 +13,9 @@ public class TestScript : MonoBehaviour {
 				GenitivePlural = "Inukawas'"
 			}
 		}, Location.Get("room"));
+
+		Player.Entity = player;
+
 		EntityDoor door = World.AddEntity<EntityDoor>(null, Location.Get("room"));
 		EntityChest chest = World.AddEntity<EntityChest>(null, Location.Get("room"));
 		EntityKey key = World.AddEntity<EntityKey>(null, Location.Get("room"));
@@ -27,11 +30,11 @@ public class TestScript : MonoBehaviour {
 		key.In = chest;
 		egg.In = chest;
 
-		player.Open(chest);
-		player.Take(key, chest);
-		player.Take(egg);
-		player.Unlock(door, key);
-		player.Open(door);
-		player.Eat(egg);
+		Player.Parse("open the chest");
+		Player.Parse("take the key from the chest");
+		Player.Parse("take the egg"); // implicit egg in chest
+		Player.Parse("unlock the door with the key");
+		Player.Parse("open the door");
+		Player.Parse("eat the egg");
 	}
 }

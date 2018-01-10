@@ -126,8 +126,13 @@ public abstract class Entity {
 	/// <summary>
 	/// Checks if this <see cref="Entity"/> is accessible.
 	/// </summary>
+	/// <param name="to">Another <see cref="Entity"/> to check if this <see cref="Entity"/> is accessible to.</param>
 	/// <returns>True if accessible, false otherwise.</returns>
-	public bool Accessible() {
+	public bool Accessible(Entity to) {
+		if (this.Location != to.Location) {
+			return false;
+		}
+		
 		if (this.In != null) {
 			if (this.In is IEntityOpenable) {
 				IEntityOpenable openable = this.In as IEntityOpenable;
@@ -136,8 +141,8 @@ public abstract class Entity {
 			} else {
 				return true;
 			}
-		} else {
-			return this.PartOf == null;
 		}
+
+		return true;
 	}
 }
