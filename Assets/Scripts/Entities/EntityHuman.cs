@@ -1,4 +1,14 @@
 ﻿public class EntityHuman : EntityHumanoid {
+	public override void Initialize() {
+		base.Initialize();
+		this.Cases = new Cases {
+			NominativeSingular = "human",
+			GenitiveSingular = "human's",
+			NominativePlural = "humans",
+			GenitivePlural = "humans'"
+		};
+	}
+
 	public virtual bool Take(Entity direct = null, Entity indirect = null) {
 		if (direct == null) {
 			return false;

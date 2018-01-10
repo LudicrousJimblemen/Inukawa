@@ -9,7 +9,12 @@ public abstract class Entity {
 	/// <summary>
 	/// Initializes this <see cref="Entity"/>.
 	/// </summary>
-	public virtual void Initialize() { }
+	public abstract void Initialize();
+
+	/// <summary>
+	/// The noun forms of this <see cref="Entity"/>.
+	/// </summary>
+	public Cases Cases;
 
 	/// <summary>
 	/// The <see cref="global::Identity"/> of this <see cref="Entity"/>.

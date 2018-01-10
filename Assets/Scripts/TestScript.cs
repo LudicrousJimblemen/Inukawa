@@ -4,7 +4,15 @@ public class TestScript : MonoBehaviour {
 	public Console Console;
 	
 	private void Start() {
-		EntityHuman player = World.AddEntity<EntityHuman>(new Identity("Inukawa"), Location.Get("room"));
+		EntityHuman player = World.AddEntity<EntityHuman>(new Identity {
+			Name = "Inukawa",
+			Cases = new Cases {
+				NominativeSingular = "Inukawa",
+				GenitiveSingular = "Inukawa's",
+				NominativePlural = "Inukawas",
+				GenitivePlural = "Inukawas'"
+			}
+		}, Location.Get("room"));
 		EntityDoor door = World.AddEntity<EntityDoor>(null, Location.Get("room"));
 		EntityChest chest = World.AddEntity<EntityChest>(null, Location.Get("room"));
 		EntityKey key = World.AddEntity<EntityKey>(null, Location.Get("room"));
@@ -21,7 +29,7 @@ public class TestScript : MonoBehaviour {
 
 		player.Open(chest);
 		player.Take(key, chest);
-		player.Take(egg, chest);
+		player.Take(egg);
 		player.Unlock(door, key);
 		player.Open(door);
 		player.Eat(egg);

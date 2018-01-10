@@ -8,10 +8,7 @@ public class Identity {
 	public string Name;
 
 	/// <summary>
-	/// Creates an identity.
+	/// The noun forms of this <see cref="Identity"/>.
 	/// </summary>
-	/// <param name="name">The name of the <see cref="Entity"/></param>
-	public Identity(string name) {
-		this.Name = name;
-	}
+	public Cases Cases;
 }
