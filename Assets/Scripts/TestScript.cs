@@ -37,5 +37,6 @@ public class TestScript : MonoBehaviour {
 		Player.Parse("unlock the door with the key", this.Console);
 		Player.Parse("open the door", this.Console);
 		Player.Parse("eat the egg", this.Console);
+		Player.Parse("kick the knee", this.Console);
 	}
 }
