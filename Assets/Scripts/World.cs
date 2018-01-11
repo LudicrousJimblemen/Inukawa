@@ -17,7 +17,7 @@ public static class World {
 	/// <param name="identity">The <see cref="Identity"/> of the new <see cref="Entity"/>.</param>
 	/// <param name="location">The <see cref="Location"/> of the new <see cref="Entity"/>.</param>
 	/// <returns>The new <see cref="Entity"/>.</returns>
-	public static T AddEntity<T>(Identity identity = null, Location location = null) where T : Entity, new() {
+	public static T AddEntity<T>(Identity identity, Location location) where T : Entity, new() {
 		T newEntity = new T();
 
 		Entities.Add(newEntity);
@@ -28,6 +28,51 @@ public static class World {
 		newEntity.Initialize();
 
 		return newEntity;
+	}
+
+	/// <summary>
+	/// Creates a new <see cref="Entity"/>.
+	/// </summary>
+	/// <param name="identity">The <see cref="Identity"/> of the new <see cref="Entity"/>.</param>
+	/// <param name="locationId">The unique id of the <see cref="Location"/> of the new <see cref="Entity"/>.</param>
+	/// <returns>The new <see cref="Entity"/>.</returns>
+	public static T AddEntity<T>(Identity identity, string locationId) where T : Entity, new() {
+		return AddEntity<T>(identity, Location.Get(locationId));
+	}
+
+	/// <summary>
+	/// Creates a new <see cref="Entity"/>.
+	/// </summary>
+	/// <param name="identity">The <see cref="Identity"/> of the new <see cref="Entity"/>.</param>
+	/// <returns>The new <see cref="Entity"/>.</returns>
+	public static T AddEntity<T>(Identity identity) where T : Entity, new() {
+		return AddEntity<T>(identity: identity, location: null);
+	}
+
+	/// <summary>
+	/// Creates a new <see cref="Entity"/>.
+	/// </summary>
+	/// <param name="locationId">The unique id of the <see cref="Location"/> of the new <see cref="Entity"/>.</param>
+	/// <returns>The new <see cref="Entity"/>.</returns>
+	public static T AddEntity<T>(string locationId) where T : Entity, new() {
+		return AddEntity<T>(null, locationId);
+	}
+
+	/// <summary>
+	/// Creates a new <see cref="Entity"/>.
+	/// </summary>
+	/// <param name="location">The <see cref="Location"/> of the new <see cref="Entity"/>.</param>
+	/// <returns>The new <see cref="Entity"/>.</returns>
+	public static T AddEntity<T>(Location location) where T : Entity, new() {
+		return AddEntity<T>(null, location);
+	}
+
+	/// <summary>
+	/// Creates a new <see cref="Entity"/>.
+	/// </summary>
+	/// <returns>The new <see cref="Entity"/>.</returns>
+	public static T AddEntity<T>() where T : Entity, new() {
+		return AddEntity<T>(identity: null, location: null);
 	}
 
 	/// <summary>
