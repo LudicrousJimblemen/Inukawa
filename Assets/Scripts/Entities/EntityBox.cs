@@ -1,4 +1,4 @@
-﻿public class EntityChest : EntityObject, IEntityOpenable, IEntityContainer {
+﻿public class EntityBox : EntityObject, IEntityOpenable, IEntityContainer {
 	public override void Initialize() {
 		base.Initialize();
 		this.Cases = new Cases {

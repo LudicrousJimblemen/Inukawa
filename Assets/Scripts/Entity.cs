@@ -143,6 +143,10 @@ public abstract class Entity {
 			}
 		}
 
-		return true;
+		if (this.PartOf == null) {
+			return true;
+		} else {
+			return this.PartOf.Accessible(to);
+		}
 	}
 }

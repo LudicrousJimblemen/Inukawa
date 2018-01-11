@@ -17,7 +17,7 @@ public class TestScript : MonoBehaviour {
 		Player.Entity = player;
 
 		EntityDoor door = World.AddEntity<EntityDoor>(null, Location.Get("room"));
-		EntityChest chest = World.AddEntity<EntityChest>(null, Location.Get("room"));
+		EntityBox box = World.AddEntity<EntityBox>(null, Location.Get("room"));
 		EntityKey key = World.AddEntity<EntityKey>(null, Location.Get("room"));
 		EntityEgg egg = World.AddEntity<EntityEgg>(null, Location.Get("room"));
 
@@ -25,10 +25,10 @@ public class TestScript : MonoBehaviour {
 		door.Locked = true;
 		door.Key = key;
 
-		chest.Open = false;
+		box.Open = false;
 
-		key.In = chest;
-		egg.In = chest;
+		key.In = box;
+		egg.In = box;
 
 		Player.Parse("open the chest");
 		Player.Parse("take the key from the chest");
