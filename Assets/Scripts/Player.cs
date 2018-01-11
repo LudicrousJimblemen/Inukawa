@@ -60,6 +60,7 @@ public static class Player {
 			}
 		}
 		
+		// TODO: Remove
 		console.Write(processed.Flatten() + "\n" + tokens.Select(x => x.ToString()).Flatten(", "));
 	}
 
@@ -86,7 +87,7 @@ public static class Player {
 
 		// TODO: Remove
 		public override string ToString() {
-			return Possibilities.Any() ? "<color=\"#ff0000\">" + String + "</color> " + String.Join(" ", Possibilities.Select(x => x.ToString()).ToArray()) : String;
+			return Possibilities.Any() ? "<color=\"#ff0000\">" + String + "</color> " + Possibilities.Select(x => x.ToString()).Flatten() : String;
 		}
 	}
 }
