@@ -25,15 +25,18 @@ public static class Player {
 					extraLength = entity.Identity.Cases.NominativeSingular.Split(' ').Length - 1;
 					if (i + extraLength < processed.Count) {
 						if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Identity.Cases.NominativeSingular) {
-							tokens[i].Possibilities.Add(new Possibility(entity, extraLength, false));
+							tokens[i].AddPossibility(entity, false, false);
+							tokens[i].String = processed.Range(i, i + extraLength + 1).Flatten();
 							i += extraLength;
 							continue;
 						}
 					}
+
 					extraLength = entity.Identity.Cases.NominativePlural.Split(' ').Length - 1;
 					if (i + extraLength < processed.Count) {
 						if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Identity.Cases.NominativePlural) {
-							tokens[i].Possibilities.Add(new Possibility(entity, extraLength, true));
+							tokens[i].AddPossibility(entity, true, false);
+							tokens[i].String = processed.Range(i, i + extraLength + 1).Flatten();
 							i += extraLength;
 							continue;
 						}
@@ -43,7 +46,8 @@ public static class Player {
 				extraLength = entity.Cases.NominativeSingular.Split(' ').Length - 1;
 				if (i + extraLength < processed.Count) {
 					if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Cases.NominativeSingular) {
-						tokens[i].Possibilities.Add(new Possibility(entity, extraLength, false));
+						tokens[i].AddPossibility(entity, false, false);
+						tokens[i].String = processed.Range(i, i + extraLength + 1).Flatten();
 						i += extraLength;
 						continue;
 					}
@@ -52,7 +56,28 @@ public static class Player {
 				extraLength = entity.Cases.NominativePlural.Split(' ').Length - 1;
 				if (i + extraLength < processed.Count) {
 					if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Cases.NominativePlural) {
-						tokens[i].Possibilities.Add(new Possibility(entity, extraLength, true));
+						tokens[i].AddPossibility(entity, true, false);
+						tokens[i].String = processed.Range(i, i + extraLength + 1).Flatten();
+						i += extraLength;
+						continue;
+					}
+				}
+
+				extraLength = entity.Cases.GenitiveSingular.Split(' ').Length - 1;
+				if (i + extraLength < processed.Count) {
+					if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Cases.GenitiveSingular) {
+						tokens[i].AddPossibility(entity, false, true);
+						tokens[i].String = processed.Range(i, i + extraLength + 1).Flatten();
+						i += extraLength;
+						continue;
+					}
+				}
+
+				extraLength = entity.Cases.GenitivePlural.Split(' ').Length - 1;
+				if (i + extraLength < processed.Count) {
+					if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Cases.GenitivePlural) {
+						tokens[i].AddPossibility(entity, true, true);
+						tokens[i].String = processed.Range(i, i + extraLength + 1).Flatten();
 						i += extraLength;
 						continue;
 					}
@@ -61,23 +86,27 @@ public static class Player {
 		}
 		
 		// TODO: Remove
-		console.Write(processed.Flatten() + "\n" + tokens.Select(x => x.ToString()).Flatten(", "));
+		console.Write(processed.Flatten() + "\n" + tokens.Flatten(", "));
 	}
 
 	private struct Possibility {
 		private Entity Entity;
-		private int Length;
 		private bool Plural;
+		private bool Possessive;
 
-		public Possibility(Entity entity, int length, bool plural) {
+		public Possibility(Entity entity, bool plural, bool possessive) {
 			this.Entity = entity;
-			this.Length = length;
 			this.Plural = plural;
+			this.Possessive = possessive;
 		}
 
 		// TODO: Remove
 		public override string ToString() {
-			return "<color=\"#ff8800\">(" + Entity + " " + Length + " " + (Plural ? "plural" : "singular") + ")</color>";
+			return String.Format(
+				"<color=\"#{0}\">({1}, {2}, {3})</color>",
+				this.Possessive ? "0088ff" : "ff8800",
+				Entity,
+				Plural ? "plural" : "singular");
 		}
 	}
 
@@ -85,9 +114,20 @@ public static class Player {
 		public string String;
 		public List<Possibility> Possibilities = new List<Possibility>();
 
+		public void AddPossibility(Entity entity, bool plural, bool possessive) {
+			Possibilities.Add(new Possibility(entity, plural, possessive));
+		}
+
 		// TODO: Remove
 		public override string ToString() {
-			return Possibilities.Any() ? "<color=\"#ff0000\">" + String + "</color> " + Possibilities.Select(x => x.ToString()).Flatten() : String;
+			if (Possibilities.Any()) {
+				return String.Format(
+					"<color=\"#ffff00\">{0}</color> [{1}]",
+					String,
+					Possibilities.Flatten(", "));
+			} else {
+				return this.String;
+			}
 		}
 	}
 }
