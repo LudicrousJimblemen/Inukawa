@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class Console : MonoBehaviour {
 	private Text text;
 
-	private void Start() {
+	private void Awake() {
 		this.text = GetComponent<Text>();
 	}
 
-	private void Write(string text) {
-		this.text.text += "\n\n" + text;
+	public void Write(string input) {
+		this.text.text += "\n\n" + input;
 	}
 }

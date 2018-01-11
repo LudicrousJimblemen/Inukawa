@@ -14,7 +14,7 @@ public class TestScript : MonoBehaviour {
 			}
 		}, Location.Get("room"));
 
-		Player.Entity = player;
+		Player.Human = player;
 
 		EntityDoor door = World.AddEntity<EntityDoor>(null, Location.Get("room"));
 		EntityBox box = World.AddEntity<EntityBox>(null, Location.Get("room"));
@@ -30,11 +30,12 @@ public class TestScript : MonoBehaviour {
 		key.In = box;
 		egg.In = box;
 
-		Player.Parse("open the chest");
-		Player.Parse("take the key from the chest");
-		Player.Parse("take the egg"); // implicit egg in chest
-		Player.Parse("unlock the door with the key");
-		Player.Parse("open the door");
-		Player.Parse("eat the egg");
+		// TODO: Remove console
+		Player.Parse("open the chest", this.Console);
+		Player.Parse("take the key from the chest", this.Console);
+		Player.Parse("take the egg", this.Console); // implicit egg in chest
+		Player.Parse("unlock the door with the key", this.Console);
+		Player.Parse("open the door", this.Console);
+		Player.Parse("eat the egg", this.Console);
 	}
 }

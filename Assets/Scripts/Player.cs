@@ -3,19 +3,90 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+// TODO: This entire class is bad.
 public static class Player {
-	public static Entity Entity;
+	public static EntityHuman Human;
 
-	public static void Parse(string input) {
-		// e.g.: I want to go to  Zimbabwe today!! Who's with me?
-		// to: ["i", "want", "to", "go", "to", "zimbabwe", "today", "who's", "with", "me"]
-		string[] processed = Regex.Split(Regex.Replace(input.ToLowerInvariant(), @"[^A-Za-z0-9-'\s]", String.Empty), @"\s+");
+	// TODO: Remove console
+	public static void Parse(string input, Console console) {
+		input = input.ToLowerInvariant();
+		input = Regex.Replace(input, @"[^a-z0-9-'\s]", String.Empty);
+		List<string> processed = Regex.Split(input, @"\s+").ToList();
+		List<Token> tokens = new List<Token>();
 
-		List<Entity> accessible = World.Entities.Where(x => x.Accessible(Entity)).ToList();
-		// UnityEngine.Debug.Log(String.Join(" ", accessible.Select(x => x.Cases.NominativeSingular).ToArray()));
+		for (int i = 0; i < processed.Count; i++) {
+			tokens.Add(new Token());
+			tokens[i].String = processed[i];
 
-		foreach (var entity in accessible.Where(x => x.Identity != null)) {
+			foreach (var entity in World.Entities) {
+				int extraLength;
 
+				if (entity.Identity != null) {
+					extraLength = entity.Identity.Cases.NominativeSingular.Split(' ').Length - 1;
+					if (i + extraLength < processed.Count) {
+						if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Identity.Cases.NominativeSingular) {
+							tokens[i].Possibilities.Add(new Possibility(entity, extraLength, false));
+							i += extraLength;
+							continue;
+						}
+					}
+					extraLength = entity.Identity.Cases.NominativePlural.Split(' ').Length - 1;
+					if (i + extraLength < processed.Count) {
+						if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Identity.Cases.NominativePlural) {
+							tokens[i].Possibilities.Add(new Possibility(entity, extraLength, true));
+							i += extraLength;
+							continue;
+						}
+					}
+				}
+
+				extraLength = entity.Cases.NominativeSingular.Split(' ').Length - 1;
+				if (i + extraLength < processed.Count) {
+					if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Cases.NominativeSingular) {
+						tokens[i].Possibilities.Add(new Possibility(entity, extraLength, false));
+						i += extraLength;
+						continue;
+					}
+				}
+
+				extraLength = entity.Cases.NominativePlural.Split(' ').Length - 1;
+				if (i + extraLength < processed.Count) {
+					if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Cases.NominativePlural) {
+						tokens[i].Possibilities.Add(new Possibility(entity, extraLength, true));
+						i += extraLength;
+						continue;
+					}
+				}
+			}
+		}
+		
+		console.Write(String.Join(" ", processed.ToArray()) + "\n" + String.Join(", ", tokens.Select(x => x.ToString()).ToArray()));
+	}
+
+	private struct Possibility {
+		private Entity Entity;
+		private int Length;
+		private bool Plural;
+
+		public Possibility(Entity entity, int length, bool plural) {
+			this.Entity = entity;
+			this.Length = length;
+			this.Plural = plural;
+		}
+
+		// TODO: Remove
+		public override string ToString() {
+			return "<color=\"#ff8800\">(" + Entity + " " + Length + " " + (Plural ? "plural" : "singular") + ")</color>";
+		}
+	}
+
+	private class Token {
+		public string String;
+		public List<Possibility> Possibilities = new List<Possibility>();
+
+		// TODO: Remove
+		public override string ToString() {
+			return Possibilities.Any() ? "<color=\"#ff0000\">" + String + "</color> " + String.Join(" ", Possibilities.Select(x => x.ToString()).ToArray()) : String;
 		}
 	}
 }
