@@ -191,8 +191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Console: {fileID: 2031580698}
-  square: 4
-  line: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &1198819841
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +412,7 @@ MonoBehaviour:
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
 --- !u!222 &2031580697
