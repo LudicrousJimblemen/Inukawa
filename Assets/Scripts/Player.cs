@@ -24,7 +24,7 @@ public static class Player {
 				if (entity.Identity != null) {
 					extraLength = entity.Identity.Cases.NominativeSingular.Split(' ').Length - 1;
 					if (i + extraLength < processed.Count) {
-						if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Identity.Cases.NominativeSingular) {
+						if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Identity.Cases.NominativeSingular) {
 							tokens[i].Possibilities.Add(new Possibility(entity, extraLength, false));
 							i += extraLength;
 							continue;
@@ -32,7 +32,7 @@ public static class Player {
 					}
 					extraLength = entity.Identity.Cases.NominativePlural.Split(' ').Length - 1;
 					if (i + extraLength < processed.Count) {
-						if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Identity.Cases.NominativePlural) {
+						if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Identity.Cases.NominativePlural) {
 							tokens[i].Possibilities.Add(new Possibility(entity, extraLength, true));
 							i += extraLength;
 							continue;
@@ -42,7 +42,7 @@ public static class Player {
 
 				extraLength = entity.Cases.NominativeSingular.Split(' ').Length - 1;
 				if (i + extraLength < processed.Count) {
-					if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Cases.NominativeSingular) {
+					if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Cases.NominativeSingular) {
 						tokens[i].Possibilities.Add(new Possibility(entity, extraLength, false));
 						i += extraLength;
 						continue;
@@ -51,7 +51,7 @@ public static class Player {
 
 				extraLength = entity.Cases.NominativePlural.Split(' ').Length - 1;
 				if (i + extraLength < processed.Count) {
-					if (String.Join(" ", processed.Skip(i).Take(extraLength + 1).ToArray()) == entity.Cases.NominativePlural) {
+					if (processed.Range(i, i + extraLength + 1).Flatten() == entity.Cases.NominativePlural) {
 						tokens[i].Possibilities.Add(new Possibility(entity, extraLength, true));
 						i += extraLength;
 						continue;
@@ -60,7 +60,7 @@ public static class Player {
 			}
 		}
 		
-		console.Write(String.Join(" ", processed.ToArray()) + "\n" + String.Join(", ", tokens.Select(x => x.ToString()).ToArray()));
+		console.Write(processed.Flatten() + "\n" + tokens.Select(x => x.ToString()).Flatten(", "));
 	}
 
 	private struct Possibility {
