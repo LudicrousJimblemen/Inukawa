@@ -7,13 +7,16 @@ public static class Utility {
 		return enumerable.Skip(from).Take(to - from);
 	}
 
+	public static IEnumerable<T> TakeFrom<T>(this IEnumerable<T> enumerable, int from, int count) {
+		return enumerable.Skip(from).Take(count);
+	}
+
 	public static string Flatten(this IEnumerable<string> enumerable, string separator) {
-		UnityEngine.Debug.Log(enumerable);
 		return String.Join(separator, enumerable.ToArray());
 	}
 
 	public static string Flatten(this IEnumerable<string> enumerable) {
-		return enumerable.Flatten(" ");
+		return enumerable.Flatten(null);
 	}
 
 	public static string Flatten<T>(this IEnumerable<T> enumerable, string separator) {
@@ -21,6 +24,6 @@ public static class Utility {
 	}
 
 	public static string Flatten<T>(this IEnumerable<T> enumerable) {
-		return enumerable.Flatten(" ");
+		return enumerable.Flatten(null);
 	}
 }
