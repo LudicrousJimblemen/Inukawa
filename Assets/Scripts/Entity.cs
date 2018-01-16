@@ -15,8 +15,6 @@ public abstract class Entity {
 
 	public List<Entity> Possessions = new List<Entity>();
 	public Entity PossessionOf = null;
-	
-	public IEntityContainer In = null;
 
 	public List<Reference> References = new List<Reference>();
 
@@ -30,10 +28,6 @@ public abstract class Entity {
 	public Entity AddPossession(Entity entity) {
 		if (entity.PossessionOf != null) {
 			entity.PossessionOf.RemovePossession(entity);
-		}
-
-		if (entity.In != null) {
-			entity.In = null;
 		}
 
 		entity.PossessionOf = this;
@@ -68,10 +62,9 @@ public abstract class Entity {
 			return false;
 		}
 		
-		if (this.In != null) {
-			if (this.In is IEntityOpenable) {
-				IEntityOpenable openable = this.In as IEntityOpenable;
-
+		if (this.PossessionOf != null) {
+			IEntityOpenable openable = this.PossessionOf as IEntityOpenable;
+			if (openable != null) {
 				return openable.Open;
 			} else {
 				return true;
@@ -85,7 +78,7 @@ public abstract class Entity {
 		}
 	}
 
-	public bool Contains(Entity entity) {
+	public bool Has(Entity entity) {
 		return this.Parts.Contains(entity) || this.Possessions.Contains(entity);
 	}
 }

@@ -173,7 +173,7 @@ public static class Player {
 						tokens[i + 1].EntityMatches =
 							tokens[i + 1]
 							.EntityMatches
-							.Where(x => tokens[i].EntityMatches.Any(y => y.Contains(x)))
+							.Where(x => tokens[i].EntityMatches.Any(y => y.Has(x)))
 							.ToList();
 
 						if (!tokens[i + 1].EntityMatches.Any()) {
@@ -183,7 +183,7 @@ public static class Player {
 						tokens[i].EntityMatches =
 							tokens[i]
 							.EntityMatches
-							.Where(x => tokens[i + 1].EntityMatches.All(y => x.Contains(y)))
+							.Where(x => tokens[i + 1].EntityMatches.All(y => x.Has(y)))
 							.ToList();
 					} else {
 						return new ParseResult(tokens, ParseResultType.ErrorUnpairedGenitive, i);
@@ -192,6 +192,15 @@ public static class Player {
 
 				foreach (var token in tokens) {
 					token.PreviousEntityMatches = token.EntityMatches;
+				}
+			}
+		}
+
+		foreach (var token in tokens) {
+			if (token.EntityMatches.Count > 1) {
+				if (token.EntityMatches.Any(x => Human.Has(x))) {
+					token.PreviousEntityMatches = token.EntityMatches;
+					token.EntityMatches = token.EntityMatches.Where(x => Human.Has(x)).ToList();
 				}
 			}
 		}

@@ -19,14 +19,17 @@ public class TestScript : MonoBehaviour {
 
 		EntityBaby baby = World.AddEntity<EntityBaby>("room");
 		EntityEgg babyEgg = World.AddEntity<EntityEgg>("room");
+		EntitySandwich babySandwich = World.AddEntity<EntitySandwich>("room");
 		EntityBaseballBat babyBaseballBat = World.AddEntity<EntityBaseballBat>("room");
 		baby.AddPossession(babyEgg);
 		baby.AddPossession(babyBaseballBat);
+		baby.AddPossession(babySandwich);
 
 		EntityDoor door = World.AddEntity<EntityDoor>("room");
 		EntityBox box = World.AddEntity<EntityBox>("room");
 		EntityKey key = World.AddEntity<EntityKey>("room");
 		EntityEgg egg = World.AddEntity<EntityEgg>("room");
+		EntitySandwich sandwich = World.AddEntity<EntitySandwich>("room");
 
 		door.Open = false;
 		door.Locked = true;
@@ -34,17 +37,18 @@ public class TestScript : MonoBehaviour {
 
 		box.Open = false;
 
-		key.In = box;
-		egg.In = box;
+		box.AddPossession(key);
+		box.AddPossession(key);
+
+		player.AddPossession(sandwich);
 		
 		Parse("open the chest");
-		// TODO: X from Y == Y's X
 		Parse("take the egg from the chest");
-		Parse("take the baby's egg");
 		Parse("take the key");
 		Parse("unlock the door with the key");
 		Parse("open the door");
 		Parse("eat the egg");
+		Parse("eat the sandwich");
 		Parse("eat the eggs");
 		Parse("take the baby's baseball bat");
 	}
@@ -64,7 +68,7 @@ public class TestScript : MonoBehaviour {
 				Console.Write(String.Format("invalid genitive: none of ({0}) own all of ({1})", result.Tokens[result.Index - 1].PreviousEntityMatches.Flatten(", "), result.Tokens[result.Index].PreviousEntityMatches.Flatten(", ")));
 				break;
 			case ParseResultType.ErrorAmbiguousToken:
-				Console.Write(String.Format("ambiguous token: '{0}' could be any of {1}", result.Tokens[result.Index].String, result.Tokens[result.Index].EntityMatches.Flatten(", ")));
+				Console.Write(String.Format("ambiguous '{0}': could be any of {1}", result.Tokens[result.Index].String, result.Tokens[result.Index].EntityMatches.Flatten(", ")));
 				break;
 			default:
 				break;
