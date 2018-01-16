@@ -49,6 +49,7 @@ using System.Text.RegularExpressions;
 		kick the [baby1, baby2]> [sandwich1]
 		> ([sandwich1] where owner is in [baby1]) <
 		kick the [baby1, baby2]> []
+		== ERROR ==
 */
 
 public static class Player {
