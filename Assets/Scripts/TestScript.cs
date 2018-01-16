@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TestScript : MonoBehaviour {
 	public Console Console;
@@ -30,41 +31,31 @@ public class TestScript : MonoBehaviour {
 		dog2.AddPossession(egg1);
 		cat1.AddPossession(egg2);
 
-		Player.Parse("kick the baby's dog's egg", this.Console);
-		Player.Parse("kick the baby's cat's egg", this.Console);
-		Player.Parse("kick the baby's sandwich", this.Console);
+		Parse("kick the baby's dog's egg");
+		Parse("kick the baby's cat's egg");
+		Parse("kick the baby's sandwich");
+		Parse("kick the baby's");
+	}
 
-		/*
-		EntityBaby baby = World.AddEntity<EntityBaby>("room");
-		EntityEgg babyEgg = World.AddEntity<EntityEgg>("room");
-		EntityBaseballBat babyBaseballBat = World.AddEntity<EntityBaseballBat>("room");
+	private void Parse(string input) {
+		ParseResult result = Player.Parse(input, this.Console);
 
-		baby.AddPossession(babyEgg);
-		baby.AddPossession(babyBaseballBat);
+		//Console.Write(String.Format("unmatched genitive: {0}", result.Tokens[result.Index].String));
 
-		EntityDoor door = World.AddEntity<EntityDoor>("room");
-		EntityBox box = World.AddEntity<EntityBox>("room");
-		EntityKey key = World.AddEntity<EntityKey>("room");
-		EntityEgg egg = World.AddEntity<EntityEgg>("room");
+		switch (result.ResultType) {
+			case ParseResultType.Success:
+				Console.Write(String.Format("success"));
+				break;
+			case ParseResultType.ErrorUnpairedGenitive:
+				Console.Write(String.Format("unpaired genitive: {0}", result.Tokens[result.Index].String));
+				break;
+			case ParseResultType.ErrorInvalidGenitive:
+				Console.Write(String.Format("invalid genitive: none of ({0}) own all of ({1})", result.Tokens[result.Index - 1].PreviousEntityMatches.Flatten(", "), result.Tokens[result.Index].PreviousEntityMatches.Flatten(", ")));
+				break;
+			default:
+				break;
+		}
 
-		door.Open = false;
-		door.Locked = true;
-		door.Key = key;
-
-		box.Open = false;
-
-		key.In = box;
-		egg.In = box;
-
-		// TODO: Remove Console
-		Player.Parse("open the chest", this.Console);
-		Player.Parse("take the egg from the chest", this.Console);
-		Player.Parse("take the baby's egg", this.Console);
-		Player.Parse("take the key", this.Console);
-		Player.Parse("unlock the door with the key", this.Console);
-		Player.Parse("open the door", this.Console);
-		Player.Parse("eat the eggs", this.Console);
-		Player.Parse("take the baby's baseball bat", this.Console);
-		*/
+		Console.Write();
 	}
 }

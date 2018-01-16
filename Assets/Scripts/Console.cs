@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
@@ -10,6 +11,10 @@ public class Console : MonoBehaviour {
 	}
 
 	public void Write(string input) {
-		this.text.text += "\n\n" + input;
+		this.text.text += "\n" + input;
+	}
+
+	public void Write() {
+		this.Write(String.Empty);
 	}
 }

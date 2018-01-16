@@ -45,7 +45,7 @@ public abstract class Entity {
 	/// The <see cref="Entity"/> which this <see cref="Entity"/> is a possession of, if any.
 	/// </summary>
 	public Entity PossessionOf = null;
-
+	
 	/// <summary>
 	/// The <see cref="IEntityContainer"/> this <see cref="Entity"/> is in, if any.
 	/// </summary>
@@ -55,7 +55,7 @@ public abstract class Entity {
 	/// A collection of <see cref="Reference"/>s this <see cref="Entity"/> has to other <see cref="Entity"/>s.
 	/// </summary>
 	public List<Reference> References = new List<Reference>();
-	
+
 	/// <summary>
 	/// Adds a <see cref="Entity"/> as a part of this <see cref="Entity"/>.
 	/// </summary>
@@ -148,5 +148,9 @@ public abstract class Entity {
 		} else {
 			return this.PartOf.Accessible(to);
 		}
+	}
+
+	public bool Contains(Entity entity) {
+		return this.Parts.Contains(entity) || this.Possessions.Contains(entity);
 	}
 }
