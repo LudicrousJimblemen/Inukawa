@@ -15,7 +15,7 @@ public class TestScript : MonoBehaviour {
 			}
 		}, Location.Get("room"));
 
-		Player.Human = player;
+		InputHandler.Player = player;
 
 		EntityBaby baby = World.AddEntity<EntityBaby>("room");
 		EntityEgg babyEgg = World.AddEntity<EntityEgg>("room");
@@ -54,8 +54,7 @@ public class TestScript : MonoBehaviour {
 	}
 
 	private void Parse(string input) {
-		// TODO: Remove console
-		ParseResult result = Player.Parse(input, this.Console);
+		ParseResult result = InputHandler.Parse(input, this.Console);
 		
 		switch (result.ResultType) {
 			case ParseResultType.Success:
