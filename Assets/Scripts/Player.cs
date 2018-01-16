@@ -60,9 +60,10 @@ public static class Player {
 		input = input.ToLowerInvariant();
 		input = Regex.Replace(input, @"[^a-z0-9-'\s]", String.Empty);
 		string[] processed = Regex.Split(input, @"\s+").Where(x => x != "a" && x != "an" && x != "the").ToArray();
-		
+
 		List<Token> tokens = new List<Token>();
 
+		// tokenize
 		for (int i = 0; i < processed.Length; i++) {
 			Token currentToken = new Token();
 			tokens.Add(currentToken);
@@ -84,6 +85,9 @@ public static class Player {
 						if (flattened == entity.Identity.Cases.GenitiveSingular || flattened == entity.Identity.Cases.GenitivePlural) {
 							currentToken.Genitive = true;
 						}
+						if (flattened == entity.Identity.Cases.NominativePlural || flattened == entity.Identity.Cases.GenitivePlural) {
+							currentToken.Plural = true;
+						}
 					}
 				} else {
 					int caseLength = entity.Cases.WordCount;
@@ -101,11 +105,53 @@ public static class Player {
 						if (flattened == entity.Cases.GenitiveSingular || flattened == entity.Cases.GenitivePlural) {
 							currentToken.Genitive = true;
 						}
+						if (flattened == entity.Cases.NominativePlural || flattened == entity.Cases.GenitivePlural) {
+							currentToken.Plural = true;
+						}
 					}
 				}
 			}
 		}
 
+		// TODO: Remove
+		console.Write(String.Join(" ", tokens.Select(token => String.Format(
+			"<color=\"#{0}\">{1}</color>{2}",
+			token.EntityMatches.Any() ? "ffff00" : "fff",
+			token.String,
+			token.EntityMatches.Any() ? " [" + String.Join(", ", token.EntityMatches.Select(x => String.Format(
+				"<color=\"#{0}\">{1}{2}</color>",
+				token.Genitive ? "00ffff" : "ff8800",
+				x,
+				x.Identity == null ? String.Empty : "(" + x.Identity.Name + ")")).ToArray()) + "]" : String.Empty)).ToArray()));
+
+		// "from" --> genitive
+		while (tokens.Any(x => x.String == "from")) {
+			int fromIndex = tokens.FindIndex(x => x.String == "from");
+
+			tokens.RemoveAt(fromIndex);
+
+			int genitiveIndexStart = fromIndex;
+			int genitiveIndexCount = 1;
+
+			while (genitiveIndexStart + genitiveIndexCount < tokens.Count && tokens[genitiveIndexStart + genitiveIndexCount].Found) {
+				genitiveIndexCount++;
+			}
+			tokens[genitiveIndexStart + genitiveIndexCount - 1].Genitive = true;
+
+			int nominativeIndexStart = fromIndex - 1;
+			int nominativeIndexCount = 1;
+
+			while (nominativeIndexStart - 1 >= 0 && tokens[nominativeIndexStart - 1].Found) {
+				nominativeIndexStart--;
+				nominativeIndexCount++;
+			}
+
+			tokens = tokens.Take(nominativeIndexStart).Concat(
+				tokens.Skip(genitiveIndexStart).Take(genitiveIndexCount)).Concat(
+					tokens.Skip(nominativeIndexStart).Take(nominativeIndexCount)).ToList();
+		}
+
+		// TODO: Remove
 		console.Write(String.Join(" ", tokens.Select(token => String.Format(
 			"<color=\"#{0}\">{1}</color>{2}",
 			token.EntityMatches.Any() ? "ffff00" : "fff",
@@ -150,6 +196,11 @@ public static class Player {
 			}
 		}
 
+		if (tokens.Any(x => x.EntityMatches.Count > 1 && !x.Plural)) {
+			return new ParseResult(tokens, ParseResultType.ErrorAmbiguousToken, tokens.FindIndex(x => x.EntityMatches.Count > 1 && !x.Plural));
+		}
+
+		// TODO: Remove
 		console.Write(String.Join(" ", tokens.Select(token => String.Format(
 			"<color=\"#{0}\">{1}</color>{2}",
 			token.Found ? "ffff00" : "fff",

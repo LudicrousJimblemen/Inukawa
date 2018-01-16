@@ -17,31 +17,42 @@ public class TestScript : MonoBehaviour {
 
 		Player.Human = player;
 
-		EntityBaby baby1 = World.AddEntity<EntityBaby>("room");
-		EntityBaby baby2 = World.AddEntity<EntityBaby>("room");
-		EntityDog dog1 = World.AddEntity<EntityDog>("room");
-		EntityDog dog2 = World.AddEntity<EntityDog>("room");
-		EntityCat cat1 = World.AddEntity<EntityCat>("room");
-		EntityEgg egg1 = World.AddEntity<EntityEgg>("room");
-		EntityEgg egg2 = World.AddEntity<EntityEgg>("room");
-		EntitySandwich sandwich1 = World.AddEntity<EntitySandwich>("room");
+		EntityBaby baby = World.AddEntity<EntityBaby>("room");
+		EntityEgg babyEgg = World.AddEntity<EntityEgg>("room");
+		EntityBaseballBat babyBaseballBat = World.AddEntity<EntityBaseballBat>("room");
+		baby.AddPossession(babyEgg);
+		baby.AddPossession(babyBaseballBat);
 
-		baby1.AddPossession(dog1);
-		baby2.AddPossession(dog2);
-		dog2.AddPossession(egg1);
-		cat1.AddPossession(egg2);
+		EntityDoor door = World.AddEntity<EntityDoor>("room");
+		EntityBox box = World.AddEntity<EntityBox>("room");
+		EntityKey key = World.AddEntity<EntityKey>("room");
+		EntityEgg egg = World.AddEntity<EntityEgg>("room");
 
-		Parse("kick the baby's dog's egg");
-		Parse("kick the baby's cat's egg");
-		Parse("kick the baby's sandwich");
-		Parse("kick the baby's");
+		door.Open = false;
+		door.Locked = true;
+		door.Key = key;
+
+		box.Open = false;
+
+		key.In = box;
+		egg.In = box;
+		
+		Parse("open the chest");
+		// TODO: X from Y == Y's X
+		Parse("take the egg from the chest");
+		Parse("take the baby's egg");
+		Parse("take the key");
+		Parse("unlock the door with the key");
+		Parse("open the door");
+		Parse("eat the egg");
+		Parse("eat the eggs");
+		Parse("take the baby's baseball bat");
 	}
 
 	private void Parse(string input) {
+		// TODO: Remove console
 		ParseResult result = Player.Parse(input, this.Console);
-
-		//Console.Write(String.Format("unmatched genitive: {0}", result.Tokens[result.Index].String));
-
+		
 		switch (result.ResultType) {
 			case ParseResultType.Success:
 				Console.Write(String.Format("success"));
@@ -51,6 +62,9 @@ public class TestScript : MonoBehaviour {
 				break;
 			case ParseResultType.ErrorInvalidGenitive:
 				Console.Write(String.Format("invalid genitive: none of ({0}) own all of ({1})", result.Tokens[result.Index - 1].PreviousEntityMatches.Flatten(", "), result.Tokens[result.Index].PreviousEntityMatches.Flatten(", ")));
+				break;
+			case ParseResultType.ErrorAmbiguousToken:
+				Console.Write(String.Format("ambiguous token: '{0}' could be any of {1}", result.Tokens[result.Index].String, result.Tokens[result.Index].EntityMatches.Flatten(", ")));
 				break;
 			default:
 				break;

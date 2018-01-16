@@ -3,7 +3,8 @@
 public enum ParseResultType {
 	Success,
 	ErrorUnpairedGenitive,
-	ErrorInvalidGenitive
+	ErrorInvalidGenitive,
+	ErrorAmbiguousToken
 }
 
 public struct ParseResult {
