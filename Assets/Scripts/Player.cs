@@ -73,48 +73,30 @@ public static class Player {
 					int caseLength = entity.Identity.Cases.WordCount;
 
 					if (i + caseLength - 1 < processed.Length) {
-						if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Identity.Cases.NominativeSingular) {
+						string flattened = processed.TakeFrom(i, caseLength).Flatten(" ");
+
+						if (entity.Identity.Cases.All.Contains(flattened)) {
 							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
+							currentToken.String = flattened;
 							i += caseLength - 1;
-						} else if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Identity.Cases.NominativePlural) {
-							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
-							i += caseLength - 1;
-						} else if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Identity.Cases.GenitiveSingular) {
-							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
+						}
+						if (flattened == entity.Identity.Cases.GenitiveSingular || flattened == entity.Identity.Cases.GenitivePlural) {
 							currentToken.Genitive = true;
-							i += caseLength - 1;
-						} else if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Identity.Cases.GenitivePlural) {
-							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
-							currentToken.Genitive = true;
-							i += caseLength - 1;
 						}
 					}
 				} else {
 					int caseLength = entity.Cases.WordCount;
 
 					if (i + caseLength - 1 < processed.Length) {
-						if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Cases.NominativeSingular) {
+						string flattened = processed.TakeFrom(i, caseLength).Flatten(" ");
+
+						if (entity.Cases.All.Contains(flattened)) {
 							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
+							currentToken.String = flattened;
 							i += caseLength - 1;
-						} else if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Cases.NominativePlural) {
-							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
-							i += caseLength - 1;
-						} else if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Cases.GenitiveSingular) {
-							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
+						}
+						if (flattened == entity.Cases.GenitiveSingular || flattened == entity.Cases.GenitivePlural) {
 							currentToken.Genitive = true;
-							i += caseLength - 1;
-						} else if (processed.TakeFrom(i, caseLength).Flatten(" ") == entity.Cases.GenitivePlural) {
-							currentToken.EntityMatches.Add(entity);
-							currentToken.String = processed.TakeFrom(i, caseLength).Flatten(" ");
-							currentToken.Genitive = true;
-							i += caseLength - 1;
 						}
 					}
 				}
