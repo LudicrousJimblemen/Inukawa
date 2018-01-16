@@ -61,6 +61,8 @@ public static class Player {
 		input = Regex.Replace(input, @"[^a-z0-9-'\s]", String.Empty);
 		string[] processed = Regex.Split(input, @"\s+").Where(x => x != "a" && x != "an" && x != "the").ToArray();
 
+		console.Write(processed.Flatten(" "));
+
 		List<Token> tokens = new List<Token>();
 
 		// tokenize
@@ -112,18 +114,7 @@ public static class Player {
 				}
 			}
 		}
-
-		// TODO: Remove
-		console.Write(String.Join(" ", tokens.Select(token => String.Format(
-			"<color=\"#{0}\">{1}</color>{2}",
-			token.EntityMatches.Any() ? "ffff00" : "fff",
-			token.String,
-			token.EntityMatches.Any() ? " [" + String.Join(", ", token.EntityMatches.Select(x => String.Format(
-				"<color=\"#{0}\">{1}{2}</color>",
-				token.Genitive ? "00ffff" : "ff8800",
-				x,
-				x.Identity == null ? String.Empty : "(" + x.Identity.Name + ")")).ToArray()) + "]" : String.Empty)).ToArray()));
-
+		
 		// "from" --> genitive
 		while (tokens.Any(x => x.String == "from")) {
 			int fromIndex = tokens.FindIndex(x => x.String == "from");
@@ -150,18 +141,7 @@ public static class Player {
 				tokens.Skip(genitiveIndexStart).Take(genitiveIndexCount)).Concat(
 					tokens.Skip(nominativeIndexStart).Take(nominativeIndexCount)).ToList();
 		}
-
-		// TODO: Remove
-		console.Write(String.Join(" ", tokens.Select(token => String.Format(
-			"<color=\"#{0}\">{1}</color>{2}",
-			token.EntityMatches.Any() ? "ffff00" : "fff",
-			token.String,
-			token.EntityMatches.Any() ? " [" + String.Join(", ", token.EntityMatches.Select(x => String.Format(
-				"<color=\"#{0}\">{1}{2}</color>",
-				token.Genitive ? "00ffff" : "ff8800",
-				x,
-				x.Identity == null ? String.Empty : "(" + x.Identity.Name + ")")).ToArray()) + "]" : String.Empty)).ToArray()));
-
+		
 		List<Token> previous = null;
 
 		while (previous != tokens) {

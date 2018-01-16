@@ -37,7 +37,7 @@ public class TestScript : MonoBehaviour {
 
 		box.Open = false;
 
-		box.AddPossession(key);
+		box.AddPossession(egg);
 		box.AddPossession(key);
 
 		player.AddPossession(sandwich);
@@ -68,7 +68,7 @@ public class TestScript : MonoBehaviour {
 				Console.Write(String.Format("invalid genitive: none of ({0}) own all of ({1})", result.Tokens[result.Index - 1].PreviousEntityMatches.Flatten(", "), result.Tokens[result.Index].PreviousEntityMatches.Flatten(", ")));
 				break;
 			case ParseResultType.ErrorAmbiguousToken:
-				Console.Write(String.Format("ambiguous '{0}': could be any of {1}", result.Tokens[result.Index].String, result.Tokens[result.Index].EntityMatches.Flatten(", ")));
+				Console.Write(String.Format("ambiguous '{0}': could be any of ({1})", result.Tokens[result.Index].String, result.Tokens[result.Index].EntityMatches.Flatten(", ")));
 				break;
 			default:
 				break;
