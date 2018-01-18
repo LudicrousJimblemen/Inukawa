@@ -3,10 +3,10 @@
 		base.Initialize();
 		this.Cases = new Cases {
 			WordCount = 1,
-			NominativeSingular = "chest",
-			GenitiveSingular = "chest's",
-			NominativePlural = "chests",
-			GenitivePlural = "chests'"
+			NominativeSingular = "box",
+			GenitiveSingular = "box's",
+			NominativePlural = "boxes",
+			GenitivePlural = "boxes'"
 		};
 	}
 

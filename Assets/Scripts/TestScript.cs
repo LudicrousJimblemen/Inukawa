@@ -13,7 +13,7 @@ public class TestScript : MonoBehaviour {
 				NominativePlural = "Inukawas",
 				GenitivePlural = "Inukawas'"
 			}
-		}, Location.Get("room"));
+		}, "room");
 
 		InputHandler.Player = player;
 
@@ -42,8 +42,8 @@ public class TestScript : MonoBehaviour {
 
 		player.AddPossession(sandwich);
 		
-		Parse("open the chest");
-		Parse("take the egg from the chest");
+		Parse("open the box");
+		Parse("take the egg from the box");
 		Parse("take the key");
 		Parse("unlock the door with the key");
 		Parse("open the door");
