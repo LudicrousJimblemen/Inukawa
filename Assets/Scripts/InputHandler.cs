@@ -22,53 +22,32 @@ public static class InputHandler {
 			tokens.Add(currentToken);
 			currentToken.String = processed[i];
 			foreach (var entity in World.Entities) {
-				if (entity.Identity != null) {
-					int caseLength = entity.Identity.Cases.WordCount;
+				Cases cases = entity.Identity != null ? entity.Identity.Cases : entity.Cases;
+				int caseLength = cases.WordCount;
+				if(i + caseLength - 1 < processed.Length) {
+					string flattened = processed.TakeFrom(i,caseLength).Flatten(" ");
 
-					if (i + caseLength - 1 < processed.Length) {
-						string flattened = processed.TakeFrom(i, caseLength).Flatten(" ");
-
-						if (entity.Identity.Cases.All.Contains(flattened)) {
-							currentToken.String = flattened;
-							currentToken.Found = true;
-							currentToken.PreviousEntityMatches.Add(entity);
-							currentToken.EntityMatches.Add(entity);
-							i += caseLength - 1;
-						}
-						if (flattened == entity.Identity.Cases.GenitiveSingular || flattened == entity.Identity.Cases.GenitivePlural) {
-							currentToken.Genitive = true;
-						}
-						if (flattened == entity.Identity.Cases.NominativePlural || flattened == entity.Identity.Cases.GenitivePlural) {
-							currentToken.Plural = true;
-						}
+					if(cases.All.Contains(flattened)) {
+						currentToken.String = flattened;
+						currentToken.Found = true;
+						currentToken.PreviousEntityMatches.Add(entity);
+						currentToken.EntityMatches.Add(entity);
+						i += caseLength - 1;
 					}
-				} else {
-					int caseLength = entity.Cases.WordCount;
-
-					if (i + caseLength - 1 < processed.Length) {
-						string flattened = processed.TakeFrom(i, caseLength).Flatten(" ");
-
-						if (entity.Cases.All.Contains(flattened)) {
-							currentToken.String = flattened;
-							currentToken.Found = true;
-							currentToken.PreviousEntityMatches.Add(entity);
-							currentToken.EntityMatches.Add(entity);
-							i += caseLength - 1;
-						}
-						if (flattened == entity.Cases.GenitiveSingular || flattened == entity.Cases.GenitivePlural) {
-							currentToken.Genitive = true;
-						}
-						if (flattened == entity.Cases.NominativePlural || flattened == entity.Cases.GenitivePlural) {
-							currentToken.Plural = true;
-						}
+					if(flattened == cases.GenitiveSingular || flattened == cases.GenitivePlural) {
+						currentToken.Genitive = true;
+					}
+					if(flattened == cases.NominativePlural || flattened == cases.GenitivePlural) {
+						currentToken.Plural = true;
 					}
 				}
 			}
 		}
-		
+
 		// "from" --> genitive
-		while (tokens.Any(x => x.String == "from")) {
-			int fromIndex = tokens.FindIndex(x => x.String == "from");
+		Func<Token,bool> genitivePredicate = (x) => { return x.String == "from" || x.String == "of";  };
+		while (tokens.Any(genitivePredicate)) {
+			int fromIndex = tokens.FindIndex(x => genitivePredicate(x));
 
 			tokens.RemoveAt(fromIndex);
 
