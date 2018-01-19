@@ -7,4 +7,7 @@ public class Token {
 	public List<Entity> EntityMatches = new List<Entity>();
 	public bool Genitive;
 	public bool Plural;
+
+	public bool IsVerb;
+	public Verb Verb;
 }
