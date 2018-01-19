@@ -72,12 +72,14 @@ public static class InputHandler {
 					tokens.Skip(nominativeIndexStart).Take(nominativeIndexCount)).ToList();
 		}
 
+		/* a monument to my idiocy - jim
 		while(tokens.Any(x => x.String == "with" || x.String == "using")) {
 			// "assistor" object
 		}
 		while(tokens.Any(x => x.String == "at" || x.String == "into" || x.String == "in" || x.String == "on")) {
 			// indirect object
 		}
+		*/
 		
 		List<Token> previous = null;
 
