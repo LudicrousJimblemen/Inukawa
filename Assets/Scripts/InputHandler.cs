@@ -92,6 +92,13 @@ public static class InputHandler {
 				tokens.Skip(genitiveIndexStart).Take(genitiveIndexCount)).Concat(
 					tokens.Skip(nominativeIndexStart).Take(nominativeIndexCount)).ToList();
 		}
+
+		while(tokens.Any(x => x.String == "with" || x.String == "using")) {
+			// "assistor" object
+		}
+		while(tokens.Any(x => x.String == "at" || x.String == "into" || x.String == "in" || x.String == "on")) {
+			// indirect object
+		}
 		
 		List<Token> previous = null;
 
